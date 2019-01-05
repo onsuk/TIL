@@ -320,3 +320,7 @@ getData().then(function (result) {
 ![right error](https://joshua1988.github.io/images/posts/web/javascript/catch-handling-error.png)
 
 발생한 에러를 성공적으로 콘솔에 출력한다.
+
+## Reference
+
+[자바스크립트 Promise 쉽게 이해하기](https://joshua1988.github.io/web-development/javascript/promise-for-beginners/)
