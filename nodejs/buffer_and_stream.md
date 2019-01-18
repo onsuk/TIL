@@ -105,7 +105,7 @@ $ node createWriteStream_practice
 
 writeStream에서 제공하는 write() 메소드로 넣을 데이터를 쓴다. 데이터를 다 썼다면 end() 메서드로 종료를 알려준다. 이 때 finish 이벤트가 발생한다.
 
-createReadStream으로 파일을 읽고 그 스트림을 전알받아 createWriteStream으로 파일을 쓸 수도 있다. 파일 복사와 비슷하다. 스트림끼리 연결하는 것을 '파이핑'이라고 표현한다.
+createReadStream으로 파일을 읽고 그 스트림을 전달받아 createWriteStream으로 파일을 쓸 수도 있다. 파일 복사와 비슷하다. 스트림끼리 연결하는 것을 '파이핑'이라고 표현한다.
 
 pipe 메서드를 사용해보자.
 ```
