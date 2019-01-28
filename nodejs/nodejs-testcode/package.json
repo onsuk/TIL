@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-testcode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nodejs-testcode.js",
+  "scripts": {
+    "test": "NODE_ENV=test node_modules/.bin/mocha ./api/user/user.spec.js",
+    "start": "node bin/www.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "should": "^13.2.3",
+    "supertest": "^3.4.1"
+  }
+}
