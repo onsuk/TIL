@@ -9,5 +9,17 @@
 
 데이터베이스 트랜잭션에서 로킹 단위는 파일, 레코드, 필드와 같이 여러가지로 나누어 질 수도 있다.
 
+## 2단계 로킹 규약(Two-Phase Locking Protocol)
+락(lock)을 걸고 해제하는 시점에 제한을 두지 않으면 두 개의 트랜잭션이 동시에 실행될 때 데이터의 일관성이 깨질 수 있어서 **로킹 단계를 2개로 구분**하여 이를 방지하는 방법
+
+![](http://www.jidum.com/upload/ckeditor/2016/07/2016072517231148.png)
+
+- 확장 단계(Growing Phase) - 트랜잭션은 새로운 lock 연산만 할 수 있고, unlock 연산은 할 수 없는 단계
+- 축소 단계(Shrinking Phase) - 트랜잭션은 unlock 연산만 실행할 수 있고, lock 연산으 실행할 수 없는 단계
+
+> 2단계 로킹 규약은 직렬 가능성을 보장할 수 있지만 교착상태(deadlock)에 빠질 수 있기 때문에 이에 대한 해결이 필요하다.
+
 # Reference
 https://raisonde.tistory.com/entry/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EB%A1%9C%ED%82%B9Locking-%EA%B8%B0%EB%B2%95%EA%B3%BC-%EB%A1%9C%ED%82%B9-%EB%8B%A8%EC%9C%84
+https://mangkyu.tistory.com/30
+http://www.jidum.com/jidums/view.do?jidumId=284
