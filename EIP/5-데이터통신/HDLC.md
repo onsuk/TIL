@@ -4,7 +4,7 @@
 - 데이터 통신이 발달하여 컴퓨터 사이에 고속의 효율 높은 전송이 필요하게 되어 ISO에서 HDLC를 제정했다.
 - HDLC 절차는 임의의 비트 길이의 정보를 프레임이라는 전송 제어 단위로 분할하여 프레임 내의 제어 정보에 포함한 명령과 응답을 이용하여 연속적인 정보를 전달하게 하는 전송 제어 절차이다.
 - 포인트 투 포인트와 멀티포인트 링크 상에 반이중이나 전이중 통신을 지원하기 위하여 설계된 비트 중심의 데이터링크 프로토콜이다.
-- LLC(Logical Link Control, Lan에서 사용), PPP(Point-to-Point Protocol, 인터넷에서 사용), LAP-D(Link Access P:rocedure, D Channel, ISDN에서 사용)과 같은 많은 데이터 링크 제어 프로토콜들의 전신이다.
+- LLC(Logical Link Control, Lan에서 사용), PPP(Point-to-Point Protocol, 인터넷에서 사용), LAP-D(Link Access Procedure, D Channel, ISDN에서 사용)과 같은 많은 데이터 링크 제어 프로토콜들의 전신이다.
 
 ## HDCL 동작 모드
 1. 정규 응답 모드(NRM - Normal Response Mode)
