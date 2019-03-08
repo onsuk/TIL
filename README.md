@@ -1,2 +1,2 @@
-# Today I Learned :bulb:
+# Today I Learned
 💻 Make a note what I learned
