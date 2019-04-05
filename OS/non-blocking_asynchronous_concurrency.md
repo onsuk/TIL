@@ -14,6 +14,7 @@ Non-blocking은 크게 보았을 때, 다음과 같은 두 가지 의미로 사�
 - **Parallelism**이란 많은 작업을 물리적으로 동시에 수행하는 것으로써, 작업자를 물리적으로 여럿 둠으로써 같은 작업을 동시에 수행할 수 있도록 만드는 것이다. 병렬성을 확보하게 되면 물리적으로 동일한 시간 내에 동일한 작업을 더 여러 번 수행할 수 있게 된다. Concurrencty와 Parallelism은 혼동하기 쉬운 개념이지만, 서로 의존관계가 없이 분리되어 있는 개념이다. Parallelism은 한 개의 프로세서에서는 확보할 수 없는 개념이다. 한 개의 프로세서가 같은 시간에 두 개의 작업을 수행하는 것은 물리적으로 불가능하기 대문이다. 반면, 한 개의 프로세서만 있다고 하더라도 동시성을 확보할 수 있다. 잘개 쪼갠 작업들이 서로 영향을 끼치지 않는다면, 하나의 작업자가 각 작업이 완료되지 않았더라도 번갈아가며 수행하는 것이 가능하다. Concurrency는 작업을 처리하는 방식을 개선함으로써 효율화를 가져오는 것이 목적이며, Parallelism은 자원 자체를 늘림으로써 작업의 처리량을 늘리는 것이 목적이다. 따라서 Concurrency와 Parallelism을 동시에 확보함으로써 시너지 효과를 가져올 수 있으나, 각각은 서로 의존성이 없다고 볼 수 있다.
 
 ## 논블록킹 & 비동기 & 동시성
+Non-blocking과 Async를 비교해보자는 질문이 있다면, 질문 자체를 좀 더 명확히 할 필요성이 있다. 우선 Non-blocking은 앞서 짚어본 바와 같이 Non-blocking I/O를 의미할 수도 있고, Non-blocking 알고리즘을 의미할 수도 있다. 또한 Async라는 용어는 Asynchronous I/O를 의미할 수도 있고, Asynchronous Programming을 의미할 수도 있다. Non-blokcing I/O를 구체적으로 분류하면 Synchronous와 Asynchronous로 구분할 수 있기 때문에 이를 비교하는 것은 의미가 있다. 그러나 Non-blocking I/O와 Asynchronous Programming은 비교 대상이 되기 어렵다. 각 개념이 바라보는 관점이 다르기 때문이다. Asynchronous Programming을 위해 Concurrency를 확보하거나  Non-blocking I/O를 활용할 수는 있지만, 이것이 Asynchronous Programming의 필수조건은 아니다. 예를 들어 Event-loop를 사용하여 동시성을 확보했으나, I/O 작업의 성격에 따라 그 처리를 위해 blocking I/O 모델을 사용할 수 있다. Blocking I/O를 사용했어도 이 부분이 별도의 채널을 통한 작업으로 이루어짐으로써 이 프로그램의 주 실행흐름(event-loop)을 막지 않았다면, 이 프로그램은 Asynchronous Programming이라고 부를 수 있다.
 
 # Reference
 [논블록킹과 비동기와 동시성](https://tech.peoplefund.co.kr/2017/08/02/non-blocking-asynchronous-concurrency.html)
