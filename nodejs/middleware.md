@@ -175,8 +175,24 @@ app.use(function (err, req, res, next) {
 ```
 
 ### 4. 기본 제공 미들웨어
+Express의 유일한 기본 제공 미들웨어 함수는 `express.static`이다. 이 함수는 [serve-static](https://github.com/expressjs/serve-static)을 기반으로 하며, Express 애플리케이션의 정적 파일을 제공하는 역할을 한다.
 
 ### 5. 써드파티 미들웨어
+Express 앱에 기능을 추가하려면 써드파티 미들웨어를 사용하면 된다. Node.js 모듈을 설치한 후, 애플리케이션 레벨 또는 라우터 레벨에서 해당 모듈을 앱에 로드한 후 쓸 수 있다.
+
+다음은 쿠키 구문 분석 미들웨어 함수인 `coocke-parser`의 설치 및 로드 코드이다.
+
+> $ npm install cookie-parser
+
+```javascript
+var express = require('express');
+var app = express();
+var cookieParser = require('cookie-parser');
+
+// load the cookie-parsing middleware
+app.use(cookieParser());
+```
+Express와 함께 일반적으로 사용되고 있는 써드파티 미들웨어 함수의 목록을 확인하려면 [써드파티 미들웨어](https://expressjs.com/ko/resources/middleware.html)를 참조하면 된다.
 
 
 # Reference
