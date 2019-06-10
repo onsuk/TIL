@@ -180,7 +180,7 @@ Express의 유일한 기본 제공 미들웨어 함수는 `express.static`이다
 ### 5. 써드파티 미들웨어
 Express 앱에 기능을 추가하려면 써드파티 미들웨어를 사용하면 된다. Node.js 모듈을 설치한 후, 애플리케이션 레벨 또는 라우터 레벨에서 해당 모듈을 앱에 로드한 후 쓸 수 있다.
 
-다음은 쿠키 구문 분석 미들웨어 함수인 `coockie-parser`의 설치 및 로드 코드이다.
+다음은 쿠키 구문 분석 미들웨어 함수인 `cookie-parser`의 설치 및 로드 코드이다.
 
 > $ npm install cookie-parser
 
