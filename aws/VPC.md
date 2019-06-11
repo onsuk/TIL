@@ -8,11 +8,67 @@
 - VPC는 반드시 하나의 Region에 종속되어 운영되며, 다수의 AZ를 이용하여 설계할 수 있다.
 - VPC에 단일 CIDR(Classless Inter-Domain Routing) 블록을 지정할 수 있다. 허용된 블록 크기는 /16 넷마스크 ~ /28 넷마스크이고, 따라서 VPC는 16 ~ 65,536개의 IP 주소를 포함할 수 있다.
 
+## Amazon VPC Console
+Amazon VPC 콘솔 대시보드의 세부 메뉴를 간략하게 살펴본다.
 
+### 가상 프라이빗 클라우드(VPC)
+
+- **VPC**(Your VPCs)
+    - VPC 목록을 조회할 수 있으며, 각 VPC에 설정된 CIDR, DHCP 설정 등을 변경할 수 있다.
+
+- **서브넷**(Subnet)
+    - 가상 인스턴스가 사용할 수 있는 private IP 주소의 범위
+    - 서브넷이 라우팅 테이블(Route Table)을 통해 인터넷 게이트웨이에 연결된 경우, 이를 퍼블릭 서브넷(Pulbic Subnet)이라고 한다.
+    - VPC 외부에서 바로 접근할 수 없는 서브넷을 프라이빗 서브넷(Private Subnet)이라고 한다.
+    - 프라이빗 서브넷의 리소스가 외부에 접촉하기 위해서는 반드시 퍼블릭 서브넷(NAT, bastion, ELB 등)을 통과해야 한다.
+
+- **라우팅 테이블**(Route Tables)
+    - Subnet에서 outbound로 나가는 트래픽의 destination(ip 대역), target(local, IGW, NAT 등)을 정의한다.
+    - VPC를 생성하면 자동으로 default 라우팅 테이블을 생성한다.
+
+- **인터넷 게이트웨이**(Internet Gateways)
+    - VPC가 인터넷에 연결되기 위해서는 Internet Gateway가 반드시 필요하다.
+    - 줄여서 IGW라고 표현하기도 한다.
+
+-  **외부 전용 인터넷 게이트웨이**(Egress Only Internet Gateways)
+    - Outbound만 허용하는 IGW
+
+- **DHCP 옵션 세트**(DHCP Options Sets)
+    - VPC를 생성하면 자동으로 DHCP 옵션 세트가 생성되어 VPC에 연결된다.
+
+- **탄력적 IP**(Elastic IPs)
+    - Elastic IP (public 고정 IP), 줄여서 EIP로 표현하기도 한다.
+    - 모든 인스턴스 또는 네트워크 인터페이스에 EIP를 부여할 수 있다.
+
+- **엔드포인트**(Endpoints)
+    - VPC Endpoint를 사용하면 NAT 디바이스나 VPN 연결, AWS Direct Connect를 통해 인터넷에 액세스하지 않고도 VPC와 다른 AWS 서비스 간에 private connection을 생성할 수 있다.
+
+- **NAT 게이트웨이**(NAT Gateways)
+    - 기존에는 NAT용 AMI를 사용한 NAT Instance를 주로 사용했으나 NAT Gateway가 출시되고 난 후, VPC에서 NAT 연결은 NAY Gateway 사용을 권장한다.
+        - NAT Instance는 스펙에 의해 트래픽을 제한받지만, NAT Gateway를 사용할 경우 10Gbps까지 트래픽을 처리할 수 있다고 한다.
+    - Private Subnet에서 외부(인터넷)에 접근하기 위해서 사용한다.
+
+- **피어링 연결**(Peering Connections)
+    - VPC to VPC의 연결을 관리한다.
+    - 자신의 계정 혹은 다른 계정이 소유하고 있는 VPC에 연결할 수 있다.
+
+### 보안(Security)
+
+- **네트워크 ACL**(Network ACLs)
+    - Subnet의 IN/OUT Bound를 정의한다.
+    - 허용 규칙만 지원한다.
+        - 참고 - [네트워크 ACL 규칙](https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/vpc-network-acls.html#nacl-rules)
+    - Instance 간 Subnet이 다른 경우 NACL(Network ACL)이 적용된다.
+
+- **보안 그룹**(Security Groups)
+    - Instance의 IN/OUT Bound를 정의한다.
+    - 허용, 금지 규칙을 지원한다.
+        - 참고 - [보안 그룹 규칙](https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules)
+    - Instance 간 Subnet이 같은 경우 Security Group만 적용된다.
 
 ## 물리 네트워크와의 비교
 
-VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는지 이해하기 위해 간단한 물리 네트워크를 보도록 한다.
+VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는지 이해하기 위해 간단한 물리 네트워크와 비교해보도록 한다.
 
 ### 물리 네트워크
 
@@ -37,7 +93,7 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 - **DHCP**(Dynamic Host Configuration Protocol)
     - 공유기에 연결된 새로운 장비에 동적으로 IP 주소를 할당한다.
 
-- **방화벽**(Filrwall)
+- **방화벽**(Firewall)
     - 내부로 들어오는/외부로 나가는 IP/PORT를 특정 규칙으로 통제(*열기 or 닫기*)할 수 있다.
 
 ### 물리 네트워크를 대체하는 VPC
@@ -46,7 +102,7 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 
 ![](https://blog.2dal.com/wp-content/uploads/2017/09/AWS-homelan-1.png)
 
-공유기의 주요 기능을 다음과 같은 AWS resource가 대신하게 된다.
+공유기의 주요 기능을 다음과 같은 각각의 AWS resource가 대신하게 된다.
 
 - **라우터**(Router)
     - **Internet Gateway + Route Table**이 라우터를 대신한다.
@@ -56,7 +112,7 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 - **스위치**(Switch), **DHCP**(Dynamic Host Configuration Protocol)
     - AWS는 스위치를 별도로 구분하지 않으며, **Subnet**이 스위치의 기능을 포함한다.
     - 가상 스위치는 가상 라우터와 가상 머신 인스턴스의 가상 NIC(Network Interace Card)가 연결되는 접점이 된다.
-    - 하나의 가상 스위치에 하나의 Subnet이 할당되며, 여기서 Subnet은 가상 머신 인스턴스가 사용할 수 있는 private IP 주소의 범위이다.
+    - 하나의 가상 스위치에 하나의 Subnet이 할당된다. (Subnet은 가상 머신 인스턴스가 사용할 수 있는 private IP 주소의 범위이다.)
     - Subnet에 연결된 인스턴스는 기동 시 **DHCP**를 통해 private IP 주소를 할당받는다.
 
 - **NAT**(Network Address Translation)
@@ -64,8 +120,6 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 
 - **방화벽**(Firewall)
     - **NACL**(Network ACL)과 **Security Group**이 방화벽을 대신한다.
-
-
 
 
 # Reference
@@ -79,3 +133,8 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 
 [AWS 사용설명서 - 보안](https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/VPC_Security.html)
 
+[[하루 3분 IT] 배스천 호스트 (Bastion Host)](http://blog.naver.com/PostView.nhn?blogId=pentamkt&logNo=221034903499&parentCategoryNo=&categoryNo=20&viewDate=&isShowPopularPosts=false&from=postView)
+
+[Elastic Load Balancing (ELB)](https://opentutorials.org/course/608/3008)
+
+[AWS 사용설명서 - 인스턴스 및 AMI](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/ec2-instances-and-amis.html)
