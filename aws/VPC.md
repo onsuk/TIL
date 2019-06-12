@@ -121,6 +121,22 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 - **방화벽**(Firewall)
     - **NACL**(Network ACL)과 **Security Group**이 방화벽을 대신한다.
 
+## About Reference Keywords
+
+- **테넌트**(Tenent)
+    - 클라우드 서비스 이용자가 갖게 되는 `자신만의 격리된 환경`을 테넌트라고 한다. 혹 다른 이용자와 물리적으로는 하나의 서버를 공유하게 되더라도 `논리적으로 분리된 멀티 테넌트 환경`에 의해서 클라우드 리소스를 보호받을 수 있다.
+    - AWS에서는 하나의 관리자 계정(AWS 콘솔 루트 사용자)에 의해 관리되는 환경을 테넌트라고 할 수 있다.
+
+- **리전**(Region)
+    - 클라우드 인프라가 위치한 국가나 지역을 식별할 수 있도록 분리한 것을 리전이라고 한다.
+    - AWS에서는 미국 동/서부, 캐나다, 유럽, 아시아, 남미 중에서 리전을 선택해서 사용할 수 있다. [AWS Region Table](https://aws.amazon.com/ko/about-aws/global-infrastructure/regional-product-services/)에서 해당 목록을 확인할 수 있다. 
+
+- **AZ**(Availability Zone)
+    - 동일 리전 안에서 리소스가 운용되는 데이터 센터를 AZ(Availability Zone)이라고 한다.
+    - 여러개의 AZ에 동일 리소스/서비스를 분산 배포해서, 특정 데이터 센터(zone)에서 발생하는 장애에 대비할 수 있다.
+    - 동일 리전 안에서의 AZ 간 발생하는 latency 문제는 `low-latency links`를 통해서 보장한다.
+
+
 
 # Reference
 [AWS VPC basic](https://blog.2dal.com/2017/09/12/aws-vpc-basic/)
