@@ -1,4 +1,4 @@
-# AWS VPC(Virtual Private Cloud)
+# Amazon VPC(Virtual Private Cloud)
 
 ## VPC란?
 
@@ -72,7 +72,7 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 
 ### 물리 네트워크
 
-다음은 Internet ISP에 연결된 공인 IP(210.1.22.33)를 가정용 공유기(Router)와 스위치를 이용해 private IP(192.168.0.0/24)로 공유해서 인터넷을 사용하는 홈랜 네트워크 구조이다.
+다음은 Internet ISP에 연결된 public IP(210.1.22.33)를 가정용 공유기(Router)와 스위치를 이용해 private IP(192.168.0.0/24)로 공유해서 인터넷을 사용하는 홈랜 네트워크 구조이다.
 
 ![](https://blog.2dal.com/wp-content/uploads/2017/09/homelan.png)
 
@@ -98,7 +98,7 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
 
 ### 물리 네트워크를 대체하는 VPC
 
-공유기를 사용하는 물리 네트워크를 AWS VPC resource에 매칭하면 다음과 같다.
+공유기를 사용하는 물리 네트워크를 Amazon VPC resource에 매칭하면 다음과 같다.
 
 ![](https://blog.2dal.com/wp-content/uploads/2017/09/AWS-homelan-1.png)
 
@@ -136,6 +136,28 @@ VPC의 각 항목이 각각 물리 네트워크의 어떤 부분에 매칭되는
     - 여러개의 AZ에 동일 리소스/서비스를 분산 배포해서, 특정 데이터 센터(zone)에서 발생하는 장애에 대비할 수 있다.
     - 동일 리전 안에서의 AZ 간 발생하는 latency 문제는 `low-latency links`를 통해서 보장한다.
 
+- **CIDR**(Classless Inter-Damain Routing)
+    - VPC resource는 CIDR로 IP 대역을 정의한다. 일반적으로 VPC는 private IP 대역인 다음 대역 내에서 CIDR을 정의한다.
+        - 10.0.0.0 - 10.255.255.255 (10.0.0.0/8)
+        - 172.16.0.0 - 172.31.255.255 (172.16.0.0/12)
+        - 192.168.0.0 - 192.168.255.255 (192.168.0.0/16)
+
+- **NIC**(Network Interface Card)
+    - NIC는 네트워크 상에서 컴퓨터 간의 통신을 위해 케이블을 사용할 때, 해당 케이블을 컴퓨터에 연결하는 매개체 역할을 한다. 즉, 
+        - 네트워크 케이블로부터 도착하는 테이터를 수신한다.
+        - 케이블을 통해 다른 컴퓨터로 데이터를 전송한다.
+        - 케이블과 컴퓨터 사이의 데이터 흐름을 제어한다.
+    - 네트워크 인터페이스 카드(NIC)는 네트워크 어댑터 카드(Network Adapter Card), LAN(Local Area Network) 카드 등 다양한 이름으로 불리고 있다.
+
+- **Bastion Host**
+    - 배스티언 호스트는 침입 차단 소프트웨어가 설치되어 내부와 외부 네트워크 사이에서 일종의 게이트 역할을 수행하는 호스트이다.
+
+- **ELB**(Elastic Load Balancing)
+    - 시스템에 가해지는 부하를 여러대의 시스템으로 분산해서 규모있는 시스템을 만들 수 있도록 해주는 단일 진입점이다.
+
+- **AMI**(Amazon Machine Image)
+    - 인스턴스를 시작하는데 필요한 정보, 즉 소프트웨어 구성이 개제된 템플릿이다.
+        - ex) OS, application server, application 등
 
 
 # Reference
