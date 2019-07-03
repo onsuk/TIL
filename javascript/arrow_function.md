@@ -106,7 +106,7 @@ console.log(pre.prefixArray(['onsuk', 'kwon', 'seunguk'])); // Hi! onsuk, ...
 ```
 
 ```javascript
-// Solution 2: map(funcm, this)
+// Solution 2: map(func, this)
 function Prefixer(prefix) {
     this.prefix = prefix;
 };
