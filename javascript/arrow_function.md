@@ -139,7 +139,7 @@ console.log(pre.prefixArray(['onsuk', 'kwon', 'seunguk'])); // Hi! onsuk, ...
 
 ### 3.2 화살표 함수의 this
 - 화살표 함수는 함수를 선언할 때 `this`에 바인딩할 객체가 정적으로 결정된다. 
-- 동적으로 결정되는 일반함수와는 달리 화살표 함수의 `this`는 언제나상위 스코프의 `this`를 가리킨다. 이를 **Lexical this**라 한다.
+- 동적으로 결정되는 일반함수와는 달리 화살표 함수의 `this`는 언제나 상위 스코프의 `this`를 가리킨다. 이를 **Lexical this**라 한다.
 > 화살표 함수는 앞서 살펴본 Solution 3의 Syntax Sugaring이다.
 
 > 화살표 함수의 `this` 바인딩 객체 결정 방식은 함수의 상위 스코프를 결정하는 방식인 **렉시컬 스코프**와 유사하다.
