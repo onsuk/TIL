@@ -101,7 +101,7 @@ writeme2.txt를 열어 보면 글이 써져 있는 것을 확인할 수 있다.
 $ node createWriteStream_practice
 파일 쓰기 완료
 ```
-먼저 createWriteStrea()으로 쓰기 스트림을 만들어준다. 첫 번째 인자는 출력 파일명이고 두 번째 인자는 옵션이며 여기서는 사용하지 않았다.
+먼저 createWriteStream()으로 쓰기 스트림을 만들어준다. 첫 번째 인자는 출력 파일명이고 두 번째 인자는 옵션이며 여기서는 사용하지 않았다.
 
 writeStream에서 제공하는 write() 메소드로 넣을 데이터를 쓴다. 데이터를 다 썼다면 end() 메서드로 종료를 알려준다. 이 때 finish 이벤트가 발생한다.
 
