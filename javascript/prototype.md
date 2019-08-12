@@ -45,7 +45,7 @@ console.log(kim.eyes);  // 2
 
 **Prototype Link**와 **Prototype Object**라는 것이 있으며, 이 둘을 통틀어 **Prototype**이라고 한다.
 
-### Prototype Objet
+### Prototype Object
 객체는 언제나 함수(Function)로 생성된다.
 ```javascript
 function Person() {}
