@@ -1,6 +1,6 @@
 # Express에서 CORS 허용하기
 
-Express에서 CORS를 허용하는 방법으로는 [express의 CORS 미들웨어](https://github.com/expressjs/cors)를 적용하는 것이다.
+Express에서 CORS를 허용하는 방법은 [express의 CORS 미들웨어](https://github.com/expressjs/cors)를 적용하는 것이다.
 
 ```javascript
 var express = require('express');
