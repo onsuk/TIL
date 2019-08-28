@@ -1,4 +1,4 @@
-# 그런 REST API로 괜찮은가
+# About REST API
 [그런 REST API로 괜찮은가](https://www.youtube.com/watch?v=RP_f5dMoHFc)라는 영상을 보고 정리한 글입니다.
 
 ## REST
