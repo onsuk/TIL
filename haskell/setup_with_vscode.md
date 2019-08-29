@@ -1,4 +1,4 @@
-# VS Code에서 Haskell 개발환경 세팅
+# VS Code Haskell 개발환경 세팅
 
 Haskell with VS Code in MacOS
 
@@ -38,7 +38,7 @@ $ stack new my-project && cd my-project
 $ stack setup
 ```
 `stack setup` 은 컴파일러를 **격리된 위치**로 다운로드하여, 시스템의 다른 `Haskell`의 설치에 대해 영향을 주지 않는다.
-> `stack path` 명령어를 통해 경로를 볼 수 있다.
+> `stack path` 명령어를 통해 설치 경로를 볼 수 있다.
 
 
 ## VS Code를 단순한 Editor에서 IDE로 바꾸기
