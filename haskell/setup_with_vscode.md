@@ -109,9 +109,9 @@ $ stack ./install.hs build-data
 
 설치가 완료되면 `Haskell Language Server` Extension을 설치해준다.
 
-![](https://miro.medium.com/max/2488/1*gYhewcKvsm5_V7nV5_Xy5Q.png)
+![](img/image3.png)
 
-위와 같이 IO 모나드에 대한 정보를 볼 수가 있다.
+위와 같이 `Language Server`가 제공하는 IO 모나드에 대한 정보를 볼 수가 있다.
 
 # Reference
 [Setting up Haskell in VS Code on macOS](https://medium.com/@dogwith1eye/setting-up-haskell-in-vs-code-on-macos-d2cc1ce9f60a)
