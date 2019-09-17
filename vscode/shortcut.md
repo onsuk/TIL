@@ -8,3 +8,4 @@
 - **한줄 복사 & 붙이기** : `shift + option + 방향키`
 - **터미널 창** : ``control + ` ``
 - **폰트 축소 / 확대** : `command + - / +`
+- **Command Palette** : `shift + command + p` or `F1`
