@@ -74,19 +74,23 @@ failureToZero (OK d) = d
     - `Failure`
     - `Double` 타입을 인자로 받아 `FailableDouble` 타입을 반환하는 `OK` 함수
 
-- `safeDiv` 함수는 위 함수를 이용해 divided by zero를 방지할 수 있다. 2번째 인자가 0인 경우는 `Failure`를 반환하고, 나머지 경우는 `OK`와 함께 연산값을 반환한다.
+- `safeDiv` 함수는 위 함수를 이용해 divided by zero를 방지할 수 있다. 나눗셈 연산을 위한 인자 중 2번째 인자가 0인 경우는 `Failure`를 반환하고, 나머지 경우는 `OK`와 함께 연산값을 반환한다.
 
-- `failureToZero` 함수는 위 함수를 이용해 failure인 경우는 0을 반환하고, 나머지 경우는 연산값을 반환한다.
+- `failureToZero` 함수는 위 함수를 이용해 `Failure`인 경우는 0을 반환하고, 나머지 경우는 연산값을 반환한다.
 
 다음과 같이 확인할 수 있다.
 ```bash
+*FailableDouble> safeDiv 2 4
+OK 0.5
 *FailableDouble> failureToZero (safeDiv 2 4)
 0.5
+*FailableDouble> safeDiv 3 0
+Failure
 *FailableDouble> failureToZero (safeDiv 3 0)
 0.0
 ```
 
-data constructor은 하나의 인자 뿐만 아니라, **여러 개의 인자**를 받을 수 있다.
+Algebraic Data Type의 data constructor은 하나의 인자 뿐만 아니라, **여러 개의 인자**를 받을 수 있다.
 
 ```haskell
 module Person where
@@ -108,7 +112,7 @@ getAge (Person _ a _) = a
 > **type constructor**과 **data constructor**은 다른 네임 스페이스를 사용하기 때문에 `Person`이라는 같은 이름을 사용해도 무방하다.
 
 
-## Then, Algebraic Data Type
+## Then, Algebraic Data Type is
 
 #### 정리하자면
 
@@ -226,6 +230,16 @@ Empty
 Cons 1 Empty
 *Person> listTest3
 Cons 2 (Cons 1 Empty)
+```
+
+Haskell의 List도 이와 같다.
+```bash
+*Person> []
+[]
+*Person> (:) 1 []
+[1]
+*Person> (:) 2 ((:) 1 [])
+[2,1]
 ```
 
 이진 트리도 이와 같은 재귀적 방식으로 정의할 수 있다.
