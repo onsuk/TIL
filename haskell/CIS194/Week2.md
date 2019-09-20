@@ -1,3 +1,5 @@
+# CIS194 - Week 2
+
 ## Enumeration Type
 많은 언어와 같이 하스켈 또한 **emnumeration type**이 있다.
 
@@ -123,3 +125,118 @@ data AlgDataType = Constr1 Type11 Type12
 - `Constr3`에 `Type31`, `Type32`, `Type33` 값을 인자로 받는다.
 - `Constr4`를 단독 사용한다.
 
+## Pattern Matching
+
+패턴 매칭에 관해 몇가지 유의할 점이다.
+
+1. 언더스코어 `_`는 와일드 카드이다.
+
+2. `x@ pat`이라는 문법은 `pat`이라는 패턴을 `x`라는 이름 안에 모두 매칭시킨다.
+```haskell
+baz :: Person -> String
+baz p@ (Person n _ _) = "The name field of (" ++ show p ++ ") is " ++ n
+```
+GHC를 통해 확인해본다.
+```bash
+*Person> baz brent
+"The name field of (Person \"Brent\" 31 SealingWax) is Brent"
+```
+
+3. 패턴을 중첩시킬 수 있다.
+```haskell
+checkFav :: Person -> String
+checkFav (Person n _ SealingWax) = n ++ ", you're my kind of Person!"
+checkFav (Person n _ _) = n ++ ", your favorite thing is lame"
+```
+
+`Person`에 대한 패턴 안에 `SealingWax`에 대한 패턴이 중첩되었다.
+
+```bash
+*Person> checkFav stan
+"Stan, your favorite thing is lame"
+*Person> checkFav brent
+"Brent, you're my kind of Person!"
+```
+
+#### 정리하자면
+일반적으로 패턴 문법은 다음과 같다.
+```haskell
+pat ::= _                      -- 와일드카드 패턴
+     |  var                    -- 변수 패턴: 모든 값과 일치하며 var라는 이름을 부여함
+     |  var @ ( pat )          -- @패턴: 패턴과 일치하는 경우 그 값에 var라는 이름을 부여함
+     |  ( Constr pat1 pat2 ... patn ) -- 생성자 패턴
+```
+> '일반적'일 뿐, 다른 패턴 문법과 기능이 추가적으로 있다.
+
+## case
+`case` 문은 다음과 같이 쓰인다.
+```haskell
+testForCase = case "Onsuk" of
+                    [] -> 3
+                    ('O':xs) -> length xs
+                    _ -> 7
+```
+`Onsuk`은 'O'로 시작하기 때문에 'nsuk'의 길이 4를 반환한다.
+```bash
+*Person> testForCase
+4
+```
+
+실제로 함수를 정의할 때 쓰이는 패턴 매칭은 `case` 문의 **syntax sugaring**이다.
+
+다음은 위 예시 코드의 `failureToZero` 함수를 `case` 문을 통해 재정의한 코드이다.
+
+```haskell
+-- failureToZero :: FailableDouble -> Double
+-- failureToZero Failure = 0
+-- failureToZero (OK d) = d
+
+failureToZero' :: FailableDouble -> Double
+failureToZero' x = case x of
+                    Failure -> 0
+                    OK d -> d
+```
+
+## Recursive Data Type
+data type은 재귀적으로 정의될 수 있다. 우리는 익숙한 예시를 계속해서 봐왔다. 바로 `List`이다.
+
+```haskell
+data IntList = Empty
+             | Cons Int IntList
+        deriving Show
+```
+
+Haskell의 built-in List는 비슷하게 정의되어 있다. `Empty` -> `[]`, `Cons` -> `:` 로 바뀐다는 점만 다르다. *(물론, Haskell의 List는 `Int` 뿐만 아닌 모든 타입을 받는다는 점에서 조금 다르다.)*
+
+```haskell
+listTest1 :: IntList
+listTest1 = Empty
+
+listTest2 :: IntList
+listTest2 = Cons 1 listTest1
+
+listTest3 :: IntList
+listTest3 = Cons 2 listTest2
+```
+GHC에서 확인해보자.
+```bash
+*Person> listTest1
+Empty
+*Person> listTest2
+Cons 1 Empty
+*Person> listTest3
+Cons 2 (Cons 1 Empty)
+```
+
+이진 트리도 이와 같은 재귀적 방식으로 정의할 수 있다.
+
+다음은 간단한 예시이다.
+
+```haskell
+data Tree = Leaf Char
+          | Node Tree Int Tree
+        deriving Show
+
+treeTest :: Tree
+treeTest = Node (Leaf 'x') 1 (Node (Leaf 'y') 2 (Leaf 'z'))
+```
