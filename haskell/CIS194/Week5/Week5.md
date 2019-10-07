@@ -198,3 +198,169 @@ data Foo' = F' Int
 `deriving` 키워드를 통해서 GHC에게 `Foo'` 타입을 `Eq`, `Ord`, `Show` 타입 클래스의 인스턴스로 만든다. 그에 속하는 구현부를 자동으로 생성해주는 것이다.
 
 
+### 타입 클래스와 자바 인터페이스
+
+타입 클래스는 자바 인터페이스와 꽤 닮아있다. 정해진 연산을 제공하는 여러개의 타입/클래스를 정의한다는 점에서 비슷하다. 하지만 **2가지** 중요한 이유로 인해, 타입 클래스가 자바 인터페이스보다 더욱 일반적이다.
+
+1. 자바 클래스(타입)가 정의될 때, implement된 인터페이스는 모두 선언되어야 한다. 반면 타입 클래스의 인스턴스 정의와 타입 선언은 별개로 선언된다(예제 코드의 타입 `Foo`과 타입 클래스 `Eq`처럼). 그리고 타입 선언, 인스턴스 정의를 각각 별도의 모듈에 넣을 수도 있다.
+
+2. 타입 클래스 메소드에 자정할 수 있는 타입은 자바 인터페이스에 지정할 수 있는 타입보다 더욱 일반적이며 유연하다. 특히 타입 파라미터가 여럿 있는 타입 클래스의 경우를 보면 그러하다. 예를 들어, 다음과 같은 타입 클래스가 있다고 가정한다.
+
+```haskell
+class Blerg a b where
+    blerg :: a -> b -> Bool
+```
+
+`blerg`를 사용하는 것은 [double dispatch](https://en.wikipedia.org/wiki/Double_dispatch)를 하는 것이다. `blerg`의 구현은 컴파일러가 `a`와 `b`의 타입을 기반으로 선택해야 한다. Java로 이것을 구현하는 것은 쉽지 않다.
+
+Haskell 타입 클래스는 이항(혹은 삼항, 사항 등) 메소드를 쉽게 처리할 수 있다.
+```haskell
+class Num a where
+    (+) :: a -> a -> a
+    -- blah blah
+```
+
+Java에서 이항 연산자를 깔끔하게 구현할 방법은 없다. Java에서는 두 인자 중 하나가 (+) 메서드를 호출할 때 실제로 메서드가 실행되는 “우대받는” 객체가 되어야 한다. 이런 비대칭성은 좀 이상하다. 더 나아가 Java의 하위타입 관계(subtyping)로 인해 어떤 함수의 두 인자를 특정 인터페이스 타입으로 지정한다고 해도 그 두 인자가 동일한 타입이 된다는 보장이 없다. 그로 인해 이런 2항(또는 그 이상) 연산자를 구현하려면 복잡해진다(보통은 실행 시점에 타입을 검사해야 한다).
+
+### Standard 타입 클래스
+
+알고 있어야 할 standard 타입 클래스가 몇개 있다.
+
+- **Ord**
+    - 해당 타입 클래스의 요소는 완전히 정렬될 수 있는 타입이다. `Ord`에 속하는 모든 두 요소의 크기를 비교할 수 있다.
+    - `(<)`나 `(<=)` 또는 `compare` 함수를 제공한다.
+
+- **Num**
+    - 숫자 타입이다. 덧셈, 뺄셈, 곱셈 등을 제공한다.
+    - 한 가지 중요한 점은 정수는 type class polymorphic하다. 즉 `5`라는 정수는 `Int`, `Integer`, `Double`과 같은 `Num` 클래스의 인스턴스로 사용 가능하다.
+
+- **Show**
+    - 모든 값을 `String`으로 변환하는 `show`라는 메소드를 정의한다.
+
+- **Read**
+    - `Show`와 듀얼 관계에 있다.
+    - 즉 모든 `String`을 값으로 변환한다.
+
+- **Integral**
+    - `Int`와 `Integer`와 같은 정수를 표현하는 타입이다.
+
+
+### 타입 클래스 예제
+
+직접 타입 클래스를 만들어보자.
+
+```haskell
+class Listable a where
+    toList :: a -> [Int]
+```
+
+`Listable`는 `Int`의 리스트를 반환하는 함수라고 말할 수 있다.
+
+`toList`의 타입을 확인해보면 다음과 같다.
+
+```bash
+*Pf> :t toList
+toList :: Listable a => a -> [Int]
+```
+
+`Listable`의 인스턴스를 만들어보자. `Int`를 `[Int]`로 바꾸는 것은 특별한 처리가 필요없다. 그리고 `Bool`은 비슷하게 `True`를 `1`로 `False`를 `0`으로 바꿔서 `[Int]`로 반환할 수 있다.
+
+
+```haskell
+instance Listable Int where
+    toList x = [x]
+
+instance Listable Bool where
+    toList True = [1]
+    toList False = [0]
+```
+
+---
+
+`[Int]`를 `[Int]`로 바꾸는 것 또한 어렵지 않다.
+
+```haskell
+instance Listable [Int] where
+    toList = id
+```
+
+`[Int]` to `[Int]`에 대한 내용이 위와 같이 CIS194에는 나와있으나, 현재 version 8.6.5 기준 GHC는 안되는 듯 하다. 다음과 같은 에러 메시지를 출력한다.
+
+```
+[ghcmod]
+• Illegal instance declaration for ‘Listable [Int]’
+    (All instance types must be of the form (T a1 ... an)
+     where a1 ... an are *distinct type variables*,
+     and each type variable appears at most once in the instance head.
+     Use FlexibleInstances if you want to disable this.)
+• In the instance declaration for ‘Listable [Int]’
+```
+
+> 참고로 위 예시코드의 `id`의 [정의](https://hoogle.haskell.org/?hoogle=id)는 `id :: a -> a`이다. 즉 그대로를 반환한다.
+
+---
+
+마지막으로 중위 순회 방식을 통해 이진 트리를 리스트로 펼칠 수 있다.
+
+```haskell
+data Tree a = Empty
+            | Node a (Tree a) (Tree a)
+
+instance Listable (Tree Int) where
+    toList Empty = []
+    toList (Node x 1 r) = toList 1 ++ [x] ++ toList r
+```
+
+`binary tree` to `[Int]`의 내용도 마찬가지로 CIS194에 나와있으나, 현재 GHC는 오류 메시지를 출력한다.
+
+```
+[ghcmod]
+• Illegal instance declaration for ‘Listable (Tree Int)’
+    (All instance types must be of the form (T a1 ... an)
+     where a1 ... an are *distinct type variables*,
+     and each type variable appears at most once in the instance head.
+     Use FlexibleInstances if you want to disable this.)
+• In the instance declaration for ‘Listable (Tree Int)’
+```
+
+---
+
+만약 `toList`를 이용해서 어떠한 함수를 구현한다면, 그 함수도 `Listable`의 제약을 받게된다. 다음 함수를 통해 살펴보자.
+
+```haskell
+sumOfList x = sum (toList x)
+```
+
+위 코드에서 `sumOfList`의 타입을 확인하면 타입 클래스 `Listable`의 제약을 받는 것을 다음과 같이 확인할 수 있다.
+
+```bash
+*Pf> :t sumOfList
+sumOfList :: Listable a => a -> Int
+```
+
+다음 함수도 살펴보자.
+
+```haskell
+foo x y = sum (toList x) == sum (toList y) || x < y
+```
+
+다음과 같은 타입을 확인할 수 있다.
+
+```bash
+*Pf> :t foo
+foo :: (Listable a, Ord a) => a -> a -> Bool
+```
+
+`foo`는 `Listable`과 `Ord` 타입에 대해서 작동한다.
+
+마지막으로 조금더 복잡한 예제를 살펴보자.
+
+```haskell
+instance (Listable a, Listable b) => Listable (a, b) where
+    toList (x, y) = toList x ++ toList y
+```
+
+
+위 예제에서는 함수 타입이 아니라 타입 클래스의 인스턴스에 대해서 제약을 걸었다는 사실을 주목하자. `(a, b)`라는 튜플 타입의 `a`와 `b`가 `Listable`의 인스턴스라는 것을 명시하고 있다. 그리고 튜플 타입을 위한 `toList`를 `toList`를 통해서 정의한다. 이 정의는 재귀적이지 않다는 사실에 주목해야 한다.
+
+즉, 위 코드에서 정의하는 `toList`는 자신(`Listable (a, b)`)의 `toList`가 아니라, 다른 타입(`Listable a`와 `Listable b`)의 `toList`를 호출한다.
