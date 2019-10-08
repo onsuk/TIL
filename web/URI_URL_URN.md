@@ -1,6 +1,6 @@
 # URI, URL, URN
 
-- **URI**(Uniform Resource Identifier)
+- **URI**(Uniform Resource Identifier)
     - 인터넷에 있는 자원을 나타내는 유일한 주소
     - 고유하게 지정된 정보 리소스의 위치에 대해 식별
     - 두가지 형태 **URL**, **URN**이 있다.
@@ -24,7 +24,7 @@
 결론: **URL**, **URN**은 **URI**의 부분집합이다.
 
 
-#### Reference
+# Reference
 [URL vs URI](https://velog.io/@honeysuckle/URL-vs-URI)
 
 [URI vs URL vs URN :: 마이구미](https://mygumi.tistory.com/139)
