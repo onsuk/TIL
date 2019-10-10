@@ -91,7 +91,7 @@ a -> b -> a
 hmm....
 ```
 
-## Two view on parametricity
+## Two views on parametricity
 
 특히 Java와 같이 `instanceof` 구문을 가진 언어를 이용해 polymorphic function을 구현해왔던 사람이라면 이러한 제약들이 성가시게 느껴질 것이다. "이게 안된다고?"
 
