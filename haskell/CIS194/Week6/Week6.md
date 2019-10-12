@@ -32,7 +32,9 @@ f (release_monkeys(), increment_counter())
 
 ### Side effects and purity
 
-그래서 우리는 **side effect**의 존재 여부가 정말 중요하다. "side effect"라고 하는 것은 *식의 계산이 식 외부의 무언가와 상호작용하게 하는 모든 것*을 의미한다. (내 생각: 필자는 side effect를 이렇게 표현했지만, 난 필자가 정의한 side effect는 [Kris Jenkins의 글(번역본)](https://medium.com/@jooyunghan/%ED%95%A8%EC%88%98%ED%98%95-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80-fab4e960d263)에서 말하는 **side cause**라고 생각한다. 상호작용을 통해 생긴 **결과**가 side effect일 것이다.)
+그래서 우리는 **side effect**의 존재 여부가 정말 중요하다. "side effect"라고 하는 것은 *식의 계산이 식 외부의 무언가와 상호작용하게 하는 모든 것*을 의미한다.
+
+> 내 생각: 필자는 side effect를 이렇게 표현했지만, 난 필자가 정의한 side effect는 [Kris Jenkins의 글(번역본)](https://medium.com/@jooyunghan/%ED%95%A8%EC%88%98%ED%98%95-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80-fab4e960d263)에서 말하는 **side cause**라고 생각한다. 상호작용을 통해 생긴 **결과**가 side effect일 것이다.
 
 Anyway,
 
@@ -121,7 +123,7 @@ f x = [x, x]
 ```
 라는 식이 있다고 가정하자. `f (1 + 1)`을 계산할 때 덧셈(`+`)은 단 **한번**만 수행된다. 하위식 `1 + 1`이 `x`가 두번 나타나는 동안 공유되기 때문이다.
 
-### 결론
+### 그 결과...
 
 Laziness는 몹시 흥미롭고 광범위하며 뻔하지만은 않은 몇 가지 결과를 초래한다. 조금 살펴보도록 하자.
 
@@ -215,3 +217,81 @@ False &&! (head [] == 'x')
 첫번째 식은 `False`를 반환하지만, 두번째 식은 계산이 뻑 날(?!) 것이다.
 
 이것들을 통해, 함수를 정의하는 데에 있어서 laziness를 둘러싼 흥미로운 문제들이 많음을 알 수 있다.
+
+#### User-defined control structures
+
+short-circuiting에 착안해 한단계 더 나아가면, Haskell에서 자신만의 control sturctures를 정의할 수 있다.
+
+대부분의 언어는 내장된 `if` 구문을 갖고 있다. 어떤 사람들은 그 이유에 대해 말하기를, `if`가 앞서 살펴본 short circuiting과 같이 동작하기 때문이라고 한다. 테스트 값에 기반해서 두가지 중 한가지만을 실행/계산한다. 두가지 모두를 계산한다면 전체 목적과 부합하지 않을 것이다.
+
+그런데 Haskell에서는 `if`를 내장 함수처럼 정의할 수 있다.
+
+```haskell
+if' :: Bool -> a -> a -> a
+if' True x _ = x
+if' False _ y = y
+```
+
+물론 Haskell에는 `if` 내장 함수가 있다. 하지만 사실 있는 이유를 모르겠다. (없어도 된다고 생각한다.) 아마도 언어 설계자들이 사용자가 그것을 원했다고 생각했을 것이다. 아무튼, `if`는 Haskell에서 그닥 많이 쓰이지 않는다. 패턴 매칭이나 가드(`|`)를 더 많이 쓴다.
+
+우리는 다른 control structures 또한 정의할 수 있는데, 추후 monads에 대해서 논의할 때 더욱 많은 예제를 살펴보도록 하자.
+
+#### Infinite data structrues
+
+Lazy evaluation을 채택했다는 것은 우리가 무한한 데이터 구조를 다룰 수 있다는 말이기도 하다. 사실 우리는 이미 예제를 통해 살펴보았는데, 리스트 안에 7밖에 없는 `repeat 7`이 그러하다. 무한한 데이터 구조는 사실 thunk만 생성하며, 완성될 총 데이터의 잠재적 성장을 위한 씨앗(seed) 정도로 생각할 수 있다.
+
+다른 실용적 적용범위는 "사실상 무한한" 데이터 구조이다. 게임의 공간 상태로 발생하는 tree와 같은 데이터 구조(ex. 체스)를 말한다. 그 tree는 비록 이론 상으로 유한하더라도, 크기가 너무 커서 사실상 무한한 것과 다름없다. Haskell을 쓰게 되면 이동 가능한 모든 tree를 정의한 다음, 원하는 방식으로 별도의 알고리즘을 각각 작성할 수 있다. **실제로 이동한 만큼의 tree만 계산될 것이다.**
+
+#### Pipelining / wholemeal programming
+
+앞서 언급했던 것처럼, 큰 데이터 구조를 "파이프라인"을 통해 점진적으로 변환하는 방식을 사용하면 메모리를 상당히 효율적으로 사용할 수 있다. 이제 우리는 그 이유에 대해 알 수 있다. laziness 덕분에 파이프라인의 각 단계는 부작용이 없이(in lockstep) 동작하며, 다음 단계에서 딱 요구하는 만큼만 생성할 수 있게 된다.
+
+> 내 생각: 'due to laziness, each stage of the pipeline can operate in lockstep'이라고 원문에서 표현하고 있다. 여기서 'in lockstep'은 '정확하게', '예측할 수 있게'의 뜻을 갖고 있다고 생각한다. 그렇기 때문에 부작용이 없이 동작하는 것에 말하는 것이라 생각한다.
+
+#### Dynamic programming
+
+Lazy evaluation가 사용자를 사로잡는 멋진 점들에 대한 더욱 구체적인 예시로, 동적 프로그래밍에 대해 논할 수 있다. 보통 동적 프로그래밍은 테이블의 항목을 적절한 순서로 채워넣어가며 해결하는 방식이다. 테이블의 항목을 채워넣을 때는 이미 계산된 항목의 결과값을 기반으로 처리하게 되는데, 올바른 순서대로 값을 채워넣음을 통해서 이미 계산된 항목의 올바른 결과값을 사용할 수 있어야 한다. 올바른 순서를 정의하지 않는다면 잘못된 결과값을 얻게 된다.
+
+하지만 lazy evaluation을 사용하게 되면 Haskell 런타임이 알아서 올바른 계산 순서대로 작동하게 할 수 있다. 예를 들어, **0-1 배낭문제**를 해결하는 Haskell 코드를 살펴보자. 재귀를 통해 간단히 array `m`을 정의하는 것과 lazy evaluation을 통해 정확한 순서로 각 항목을 계산하는 것에 유의해야 한다.
+
+> 참고로 배낭문제(knapsack problem)는 (무게와 가치가) 정해진 물건들을 (최대로 집어넣을 수 있는 무게가 정해진) 가방에 넣되, 물건 전체 가치의 합이 최대가 되게 하는 물건들의 조합을 찾는 문제이다.
+
+```haskell
+knapsack01 :: [Double]   -- values 
+           -> [Integer]  -- nonnegative weights
+           -> Integer    -- knapsack size
+           -> Double     -- max possible value
+knapsack01 vs ws maxW = m!(numItems-1, maxW)
+  where numItems = length vs
+        m = array ((-1,0), (numItems-1, maxW)) $
+              [((-1,w), 0) | w <- [0 .. maxW]] ++
+              [((i,0), 0) | i <- [0 .. numItems-1]] ++
+              [((i,w), best) 
+                  | i <- [0 .. numItems-1]
+                  , w <- [1 .. maxW]
+                  , let best
+                          | ws!!i > w  = m!(i-1, w)
+                          | otherwise = max (m!(i-1, w)) 
+                                            (m!(i-1, w - ws!!i) + vs!!i)
+              ]
+
+example = knapsack01 [3,4,5,8,10] [2,3,4,5,9] 20
+```
+
+(글을 쓰여질 당시에는 무방했던 것 같으나) 현재는 다음과 같은 에러를 출력하게 된다.
+
+```
+/Users/onz/haskell-practice/src/Knapsack.hs:2:1: error:
+    Could not load module ‘Data.Array’
+    It is a member of the hidden package ‘array-0.5.3.0’.
+    You can run ‘:set -package array’ to expose it.
+    (Note: this unloads all the modules in the current scope.)
+    Use -v to see a list of the files searched for.
+```
+
+다음과 같이 GHC에 command 하나를 입력하면 해결된다.
+
+```
+Prelude> :set -package array
+package flags have changed, resetting and loading new packages...
+```
