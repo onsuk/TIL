@@ -2,23 +2,23 @@
 
 ## Lazy evaluation
 
-하스켈은 **lazy**하다. lazy하다는 것이 무엇인지에 대해 배워보려고 한다.
+하스켈은 **lazy**하다. Lazy하다는 것이 무엇인지에 대해 배워보려고 한다.
 
 ### Strict evaluation
 
-lazy evaluation에 대해 얘기하기 전에 반대말인 strict evaluation에 대해 알아두면 좋다.
+Lazy evaluation에 대해 얘기하기 전에 반대말인 strict evaluation에 대해 알아두면 좋다.
 
-strict evaluation을 채택하게 되면, 함수 인자들이 함수로 전달되기 전에 완전히 계산된다. 예를 들어 아래와 같은 정의를 살펴보자.
+Strict evaluation을 채택하게 되면, 함수 인자들이 함수로 전달되기 전에 완전히 계산된다. 예를 들어 아래와 같은 정의를 살펴보자.
 
 ```haskell
 f x y = x + 2
 ```
 
-strict language은 `f 5 (29^35792)`를 계산할 때, (이미 계산된)`5`와 (상당히 계산할 것이 많은)`29^35792`를 완전하게 계산한 후에 그 결과를 함수 `f`에게 전달해준다.
+Strict language은 `f 5 (29^35792)`를 계산할 때, (이미 계산된)`5`와 (상당히 계산할 것이 많은)`29^35792`를 완전히 계산한 후에 그 결과를 함수 `f`에게 전달해준다.
 
-`f` 함수가 두번째 인수(`29^35792`)를 무시하기 때문에, 이러한 특정 예제에서의 strict evaluation은 멍청하다. `29^35792`에 대한 모든 연산은 낭비되었다. 그럼에도 불구하고 우리는 왜 strict evaluation이 필요할까?
+`f` 함수가 두번째 인수(`29^35792`)를 무시하기 때문에, 이러한 특정 예제에서의 strict evaluation은 멍청한 짓이다. `29^35792`에 대한 모든 연산은 낭비되기 때문이다. 그럼에도 불구하고 우리는 왜 strict evaluation이 필요할까?
 
-strict evaluation의 장점은 언제 어떤 순서로 일이 일어나는지 예측하기 쉽다는 것이다. 심지어 일반적으로 strict evaluation 언어는 인수의 평가 순서도 정한다.(ex. 왼쪽에서 오른쪽으로)
+Strict evaluation의 장점은 언제 어떤 순서로 일이 일어나는지 예측하기 쉽다는 것이다. 심지어 일반적으로 strict evaluation 언어는 인수의 평가 순서도 정한다(ex. 왼쪽에서 오른쪽으로).
 
 예를 들어, Java에서 우리는 
 
@@ -26,7 +26,7 @@ strict evaluation의 장점은 언제 어떤 순서로 일이 일어나는지 �
 f (release_monkeys(), increment_counter())
 ```
 
-우리는 `monkeys`가 release되었으며, `counter`이 increment되었다는 것, 그리고 두가지 작업의 결과값이 `f` 함수로 전달되는 것, `f` 함수가 결과값을 사용하는 지는 중요하지 않다는 것을 안다.
+`monkeys`가 release되었으며, `counter`이 increment되고 두가지 작업의 결과값이 `f` 함수로 전달된다. 그리고 `f` 함수가 결과값을 사용하는 지는 중요하지 않다.
 
 만약 `f`가 결과를 사용하는지의 여부에 따라서 `monkeys`의 releasing과 `counter`의 incrementing이 독립적으로 일어난다면 몹시 혼란스러울 것이다. 이러한 **side effect**(부작용)가 있는 경우에는, strict evaluation을 택하는 것이 적합하다.
 
@@ -51,7 +51,7 @@ Anyway,
 
 ### Lazy evaluation
 
-strict evaluation에 대해서 알아봤으니, lazy evaluation에 대해서 알아보도록 하자. lazy evaluation을 채택하게 되면, 함수 인자의 계산이 가능한만큼 미뤄진다. 인자는 그것이 실제로 필요해지기 직전까지 계산되지 않는다. 어떠한 식이 함수 인자로 전달될 때, 그 식에 대한 계산을 하지 않고 *계산되지 않은 식*(unevaluated expression - called **thunk**)으로 감싸져서 전달된다.
+Strict evaluation에 대해서 알아봤으니, lazy evaluation에 대해서 알아보도록 하자. lazy evaluation을 채택하게 되면, 함수 인자의 계산이 가능한만큼 미뤄진다. 인자는 그것이 실제로 필요해지기 직전까지 계산되지 않는다. 어떠한 식이 함수 인자로 전달될 때, 그 식에 대한 계산을 하지 않고 *계산되지 않은 식*(unevaluated expression - called **thunk**)으로 감싸져서 전달된다.
 
 예를 들어 `f 5 (29^35792)`라는 식을 계산할 때, 두번째 인자(`(29^35792)`)는 계산되지 않는 thunk로 감싸지고 `f`는 즉시 호출된다. `f`가 해당 인자를 사용하지 않기 때문에 thunk는 가비지 콜렉터에 의해 버려진다.
 
@@ -79,7 +79,7 @@ f2 (Just x) = [x]
 ```
 f2 (safeHead [3^500, 49])
 ```
-`f2`는 `safeHead [3^500, 49]`의 호출에 대한 계산을 강제한다. 계산의 결과값은 `Just (3^500)`이다. `f2`와 여전히 `3^500`은 계산되지 않았다. `f2`와 `safeHead` 둘다 마찬가지로 `3^500`에 대해서 알 필요가 없기 때문이다. `3^500`이 계산되는지의 여부는 `f2`가 어떻게 사용되는지에 따라 달려있다. 즉, `f2`의 결과값(`Just (3^500)`)을 가져다가 `Just` 안에 들어있는 값을 사용하려고 할 때 `3^500`에 대한 계산이 이루어진다.
+`f2`는 `safeHead [3^500, 49]`의 호출에 대한 계산을 강제한다. 계산의 결과값은 `Just (3^500)`이다. 여전히 `3^500`은 계산되지 않았다. `f2`와 `safeHead` 둘다 마찬가지로 `3^500`에 대해서 알 필요가 없기 때문이다. `3^500`이 계산되는지의 여부는 `f2`가 어떻게 사용되는지에 따라 달려있다. 즉, `f2`의 결과값(`Just (3^500)`)을 가져다가 `Just` 안에 들어있는 값을 사용하려고 할 때 `3^500`에 대한 계산이 이루어진다.
 
 #### 패턴 매칭이 계산 방법을 이끈다.
 
@@ -220,7 +220,7 @@ False &&! (head [] == 'x')
 
 #### User-defined control structures
 
-short-circuiting에 착안해 한단계 더 나아가면, Haskell에서 자신만의 control sturctures를 정의할 수 있다.
+Short-circuiting에 착안해 한단계 더 나아가면, Haskell에서 자신만의 control sturctures를 정의할 수 있다.
 
 대부분의 언어는 내장된 `if` 구문을 갖고 있다. 어떤 사람들은 그 이유에 대해 말하기를, `if`가 앞서 살펴본 short circuiting과 같이 동작하기 때문이라고 한다. 테스트 값에 기반해서 두가지 중 한가지만을 실행/계산한다. 두가지 모두를 계산한다면 전체 목적과 부합하지 않을 것이다.
 
