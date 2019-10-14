@@ -246,7 +246,7 @@ Lazy evaluation을 채택했다는 것은 우리가 무한한 데이터 구조�
 
 앞서 언급했던 것처럼, 큰 데이터 구조를 "파이프라인"을 통해 점진적으로 변환하는 방식을 사용하면 메모리를 상당히 효율적으로 사용할 수 있다. 이제 우리는 그 이유에 대해 알 수 있다. laziness 덕분에 파이프라인의 각 단계는 부작용이 없이(in lockstep) 동작하며, 다음 단계에서 딱 요구하는 만큼만 생성할 수 있게 된다.
 
-> 내 생각: 'due to laziness, each stage of the pipeline can operate in lockstep'이라고 원문에서 표현하고 있다. 여기서 'in lockstep'은 '정확하게', '예측할 수 있게'의 뜻을 갖고 있다고 생각한다. 그렇기 때문에 부작용이 없이 동작하는 것에 말하는 것이라 생각한다.
+> 내 생각: 'due to laziness, each stage of the pipeline can operate in lockstep'이라고 원문에서 표현하고 있다. 여기서 'in lockstep'은 '정확하게', '예측할 수 있게'의 뜻을 갖고 있다고 생각한다. 그렇기 때문에 '부작용이 없이 동작하는 것'에 대해 말하는 것이라 생각한다.
 
 #### Dynamic programming
 
