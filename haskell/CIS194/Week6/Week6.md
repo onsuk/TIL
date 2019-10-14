@@ -51,7 +51,7 @@ Anyway,
 
 ### Lazy evaluation
 
-Strict evaluation에 대해서 알아봤으니, lazy evaluation에 대해서 알아보도록 하자. lazy evaluation을 채택하게 되면, 함수 인자의 계산이 가능한만큼 미뤄진다. 인자는 그것이 실제로 필요해지기 직전까지 계산되지 않는다. 어떠한 식이 함수 인자로 전달될 때, 그 식에 대한 계산을 하지 않고 *계산되지 않은 식*(unevaluated expression - called **thunk**)으로 감싸져서 전달된다.
+Strict evaluation에 대해서 알아봤으니, lazy evaluation에 대해서 알아보도록 하자. Lazy evaluation을 채택하게 되면, 함수 인자의 계산이 가능한만큼 미뤄진다. 인자는 그것이 실제로 필요해지기 직전까지 계산되지 않는다. 어떠한 식이 함수 인자로 전달될 때, 그 식에 대한 계산을 하지 않고 *계산되지 않은 식*(unevaluated expression - called **thunk**)으로 감싸져서 전달된다.
 
 예를 들어 `f 5 (29^35792)`라는 식을 계산할 때, 두번째 인자(`(29^35792)`)는 계산되지 않는 thunk로 감싸지고 `f`는 즉시 호출된다. `f`가 해당 인자를 사용하지 않기 때문에 thunk는 가비지 콜렉터에 의해 버려진다.
 
@@ -179,7 +179,7 @@ foldl' (+) 0 [1, 2, 3]
 
 #### Short-circuiting operators
 
-Java와 C++같은 언어에서는 `boolean` 연산자 `&&`(AND)와 `||`(OR)이 shor-circuiting을 지원한다. 예를 들어, `&&`의 첫번째 인자가 `false`라면 식은 즉시 두번째 인자와 상관없이 `false`를 반환한다. 하지만 Java와 C++와 같은 언어에서는 이러한 short-circuiting이 특별한 경우로 정해져 있다. 일반적으로 strict 언어에서는 두개의 인자를 갖는 함수의 인자는 함수가 호출되기 전에 계산된다. 그렇기 때문에 `&&`와 `||`에 대한 short-circuiting은 언어의 문법에서 정한 특별한 예외이다.
+Java와 C++같은 언어에서는 `boolean` 연산자 `&&`(AND)와 `||`(OR)이 short-circuiting을 지원한다. 예를 들어, `&&`의 첫번째 인자가 `false`라면 식은 즉시 두번째 인자와 상관없이 `false`를 반환한다. 하지만 Java와 C++와 같은 언어에서는 이러한 short-circuiting이 특별한 경우로 정해져 있다. 일반적으로 strict 언어에서는 두개의 인자를 갖는 함수의 인자는 함수가 호출되기 전에 계산된다. 그렇기 때문에 `&&`와 `||`에 대한 short-circuiting은 언어의 문법에서 정한 특별한 예외이다.
 
 하지만 Haskell에서는 어떠한 예외 없이 short-circuiting을 정의할 수 있다. 사실 `&&`와 `||`은 standard 함수일 뿐이다! 예를 들어 `&&`가 어떻게 정의되었는지 살펴보도록 하자.
 
