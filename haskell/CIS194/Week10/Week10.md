@@ -20,7 +20,7 @@ Employee :: Name -> String -> Employee
 
 `Name`과 `String`이 있다면, data constructor `Employee`을 적용해서 `Employee` object를 만들 수 있다.
 
-하지만 우리가 `Name`과 `String`을 갖고 있는게 아니라, `Maybe Name`과 `Maybe String`을 갖고 있다고 가정해보자. 아마도 오류로 가득찬 파일을 파싱하거나 일부 필드를 비워두거나, 비슷한 종류의 파일을 파싱했을 것이다. 한 마디로 `Employee`를 만들 수 없다. 하지만 `Maybe Employee`는 만들 수 있다. 즉 우리는 `(Name -> String -> Emploee)` 함수를 `(Maybe Name -> Maybe String -> Maybe Employee)` 함수로 바꿀 수 있다. 이 타입으로 무언가를 쓸 수 있을까?
+하지만 우리가 `Name`과 `String`을 갖고 있는게 아니라, `Maybe Name`과 `Maybe String`을 갖고 있다고 가정해보자. 아마도 오류로 가득찬 파일을 파싱하거나 일부 필드를 비워두거나, 비슷한 종류의 파일을 파싱했을 것이다. 한 마디로 `Employee`를 만들 수 없다. 하지만 `Maybe Employee`는 만들 수 있다. 즉 우리는 `(Name -> String -> Employee)` 함수를 `(Maybe Name -> Maybe String -> Maybe Employee)` 함수로 바꿀 수 있다. 이 타입으로 무언가를 쓸 수 있을까?
 
 ```haskell
 (Name -> String -> Employee) ->
@@ -69,7 +69,7 @@ fmap2 h fa fb = undefined
 ```
 
 할 수 있는만큼 해봤지만, `Functor`은 `fmap2`를 구현하기에 충분하지 않다.
-> `f`에 대해서 완전한 추상화가 이루어지지 않은 점을 말하는 듯 하다.
+> 무슨 점이 충분하지 않다는 것일까...
 
 무엇이 잘못되었을까? 우리는 다음과 같은 것들을 갖고 있다.
 
@@ -87,7 +87,7 @@ fmap h :: f a -> f (b -> c)
 fmap h fa :: f (b -> c)
 ```
 
-이제 우리는 `f (b -> c)`과 `f (b...` ... 여기서 막히게 된다! `fmap`은 더 이상 도움이 되지 않는다. 함수를 `Functor` 콘텍스트 내의 값에 적용하는 방법은 될 수 있지만, 우리가 지금 필요한 것은 `Functor` 콘텍스트 내의 함수를 `Functor` 콘텍스트의 값에 적용하는 방법이다.
+이제 우리는 `f (b -> c)`와 `f (b...` ... 여기서 막히게 된다! `fmap`은 더 이상 도움이 되지 않는다. 함수를 `Functor` 콘텍스트 내의 값에 적용하는 방법은 될 수 있지만, 우리가 지금 필요한 것은 `Functor` 콘텍스트 내의 함수를 `Functor` 콘텍스트의 값에 적용하는 방법이다.
 
 
 ## Applicative
@@ -105,7 +105,7 @@ class Functor f => Applicative f where
 ```haskell
 pure :: a             -> f a
 fmap :: (a -> b)      -> f a -> f b
-map2 :: (a -> b -> c) -> f a -> f b -> f c
+fmap2 :: (a -> b -> c) -> f a -> f b -> f c
 ```
 
 이제 우리는 `(<*>)`를 갖고 있으니 `fmap2`를 구현할 수 있다. 이 함수는 하스켈 표준 라이브러리에는 `liftA2`라는 이름으로 존재한다. (`Control.Applicative` 모듈 안에 있다.)
@@ -128,7 +128,7 @@ liftA3 :: Applicative f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d
 liftA3 h fa fb fc = ((h <$> fa) <*> fb) <*> fc
 ```
 
-> `<$>`과 `<*>`는 위의 괄호가 하나도 없어도 우선순위와 연관성에 있어서 잘 동작하도록 실제로 정의되어 있다.
+> 실제로는 `<$>`과 `<*>`에 위의 괄호가 하나도 없어도 우선순위와 연관성에 있어서 잘 동작하도록 정의되어 있다.
 
 `fmap`에서 `liftA2`로 넘어가려면 `Functor`에서 `Applicative`로 바뀌어야 한다. 하지만 `liftA2`에서 `liftA3`으로 넘어가거나 그 다음 `liftA4` 등으로 넘어가는 것은 바뀌는 것이 없다. `Applicative`이면 충분한 것이다.
 
@@ -157,7 +157,7 @@ f `fmap` === pure f <*> x
 
 #### Maybe
 
-`Maybe`로 시작하는 `Applicative`의 인스턴스를 써보자. `pure`은 `Just`로 감싸는 값을 주입하도록 동작한다. `<*>`은 실패할 가능성이 있는 함수 적용이다. 함수 또는 인자가 있다면 결과는 `Nothing`이다.
+`Maybe`로 시작하는 `Applicative`의 인스턴스를 써보자. `pure`은 `Just`로 감싸는 값을 주입하도록 동작한다. `<*>`은 실패할 가능성이 있는 함수 적용이다. 함수 또는 인자가 하나라도 `Nothing`이라면 결과는 `Nothing`이다.
 
 ```haskell
 instance Applicative Maybe where
