@@ -69,7 +69,6 @@ fmap2 h fa fb = undefined
 ```
 
 할 수 있는만큼 해봤지만, `Functor`은 `fmap2`를 구현하기에 충분하지 않다.
-> 무슨 점이 충분하지 않다는 것일까...
 
 무엇이 잘못되었을까? 우리는 다음과 같은 것들을 갖고 있다.
 
@@ -111,6 +110,13 @@ fmap2 :: (a -> b -> c) -> f a -> f b -> f c
 이제 우리는 `(<*>)`를 갖고 있으니 `fmap2`를 구현할 수 있다. 이 함수는 하스켈 표준 라이브러리에는 `liftA2`라는 이름으로 존재한다. (`Control.Applicative` 모듈 안에 있다.)
 
 ```haskell
+liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c
+liftA2 h fa fb = (h `fmap` fa) <*> fb
+```
+
+사실, 이러한 패턴은 `Control.Applicative` 모듈에서 흔하게 정의되어 있다. `fmap`을 `(<$>)`으로 정의하고 있다.
+
+```haskell
 (<$>) :: Functor f => (a -> b) -> f a -> f b
 (<$>) = fmap
 ```
@@ -146,7 +152,7 @@ liftX h fa b fc = h <$> fa <*> pure b <*> fc
 `Applicatice`에는 정말 흥미로운 한가지 법칙이 있다.
 
 ```haskell
-f `fmap` === pure f <*> x
+f `fmap` x === pure f <*> x
 ```
 
 컨테이너 `x`에 함수 `f`를 매핑하면 먼저 컨테이너에 함수를 주입 한 다음 `(<*>)`를 사용하여 `x`에 적용하는 것과 동일한 결과를 줘야 한다.
