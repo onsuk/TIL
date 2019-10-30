@@ -87,12 +87,12 @@ fmap h :: f a -> f (b -> c)
 fmap h fa :: f (b -> c)
 ```
 
-이제 우리는 `f (b -> c)`과 `f (b...` 여기서 막히게 된다! `fmap`은 더 이상 도움이 되지 않는다. 함수를 `Functor` 콘텍스트 내의 값에 적용하는 방법은 될 수 있지만, 우리가 지금 필요한 것은 `Functor` 콘텍스트 내의 함수를 `Functor` 콘텍스트의 값에 적용하는 방법이다.
+이제 우리는 `f (b -> c)`과 `f (b...` ... 여기서 막히게 된다! `fmap`은 더 이상 도움이 되지 않는다. 함수를 `Functor` 콘텍스트 내의 값에 적용하는 방법은 될 수 있지만, 우리가 지금 필요한 것은 `Functor` 콘텍스트 내의 함수를 `Functor` 콘텍스트의 값에 적용하는 방법이다.
 
 
 ## Applicative
 
-'contextual application'이라고 불리는 이러한 종류의 `Functor`은 **applicative**라고 부를 수 있다. 그리고 `Applicative` 클래스가 이러한 패턴을 정의한다. 
+이러한 종류의 'contextual application' `Functor`은 **applicative**라고 부를 수 있다. 그리고 `Applicative` 클래스가 이러한 패턴을 정의한다. 
 
 ```haskell
 class Functor f => Applicative f where
@@ -100,7 +100,7 @@ class Functor f => Applicative f where
     (<*>) :: f (a -> b) -> f a -> f b
 ```
 
-`(<*>)` 연산자는 'apply'의 줄임말인 'ap'으로 자주 발음된다. `(<*>)`는 정확히 'contextual application'의 원칙을 고수한다. `Applicative` 클래스의 인스턴스는 `Functor`의 인스턴스이기 때문에, `Applicative` 클래스의 인스턴스에 `fmap`을 항상 쓸 수 있다는 점을 유의하자. `Applicative`는 또 다른 메소드 `pure`을 갖고 있다. `pure`은 컨테이너에 `a` 타입의 값을 넣는다. 이제는, `pure`의 또 다른 합리적인 이름으로 `fmap0`을 사용할 수 있다는 점이 흥미롭다.
+`(<*>)` 연산자는 'apply'의 줄임말인 'ap'으로 자주 발음된다. `(<*>)`는 정확히 'contextual application'의 원칙을 고수한다. `Applicative` 클래스의 인스턴스는 `Functor`의 인스턴스이기 때문에, `Applicative` 클래스의 인스턴스에 `fmap`을 항상 쓸 수 있다는 점을 유의하자. `Applicative`는 또 다른 메소드 `pure`을 갖고 있다. `pure`은 컨테이너에 `a` 타입의 값을 넣는다. 여기서 흥미로운 점은 `fmap0`이 `pure`의 또 다른 reasonable한 이름일 수 있다는 점이다.
 
 ```haskell
 pure :: a             -> f a
@@ -108,7 +108,7 @@ fmap :: (a -> b)      -> f a -> f b
 map2 :: (a -> b -> c) -> f a -> f b -> f c
 ```
 
-이제 우리는 `(<*>)`를 갖고 있으니 `fmap2`를 구현할 수 있다. 이 함수는 하스켈 표준 라이브러리에는 `liftA2`라는 이름으로 존재한다.
+이제 우리는 `(<*>)`를 갖고 있으니 `fmap2`를 구현할 수 있다. 이 함수는 하스켈 표준 라이브러리에는 `liftA2`라는 이름으로 존재한다. (`Control.Applicative` 모듈 안에 있다.)
 
 ```haskell
 (<$>) :: Functor f => (a -> b) -> f a -> f b
@@ -119,4 +119,78 @@ map2 :: (a -> b -> c) -> f a -> f b -> f c
 
 ```haskell
 liftA2 h fa fb = h <$> fa <*> fb
+```
+
+`liftA3`은 어떨까?
+
+```haskell
+liftA3 :: Applicative f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d
+liftA3 h fa fb fc = ((h <$> fa) <*> fb) <*> fc
+```
+
+> `<$>`과 `<*>`는 위의 괄호가 하나도 없어도 우선순위와 연관성에 있어서 잘 동작하도록 실제로 정의되어 있다.
+
+`fmap`에서 `liftA2`로 넘어가려면 `Functor`에서 `Applicative`로 바뀌어야 한다. 하지만 `liftA2`에서 `liftA3`으로 넘어가거나 그 다음 `liftA4` 등으로 넘어가는 것은 바뀌는 것이 없다. `Applicative`이면 충분한 것이다.
+
+실제로 이와 같이 여러 인자들을 받을 때 `liftA2`, `liftA3`과 같이 귀찮은 방법을 쓰지 않는다. `f <$> x <*> y <*> z <*> ...`과 같은 방식으로 직접적으로 쓴다. (하지만 partial application할 때는 `liftA2`와 같은 방식을 쓴다.)
+
+그렇다면 `pure`은 무엇일까? `pure`은 functor 타입 `f`의 콘텍스트 안에 있지만 **`f`가 아닌** 어떠한 인자에 함수를 적용하려고 하는 상황을 위한 것이다. 이러한 인자들은 말 그대로 'pure'하기 때문에 그렇게 부른다. apply하기 전에 `pure`을 써서 `f`로 lift할 수 있다.
+
+```haskell
+liftX :: Applicative f => (a -> b -> c -> d) -> f a -> b -> f c -> f d
+liftX h fa b fc = h <$> fa <*> pure b <*> fc
+```
+
+## Applicative laws
+
+`Applicatice`에는 정말 흥미로운 한가지 법칙이 있다.
+
+```haskell
+f `fmap` === pure f <*> x
+```
+
+컨테이너 `x`에 함수 `f`를 매핑하면 먼저 컨테이너에 함수를 주입 한 다음 `(<*>)`를 사용하여 `x`에 적용하는 것과 동일한 결과를 줘야 한다.
+
+다른 법칙들이 있지만 그닥 유익하지 않을 수 있다. 정말 필요할 때 읽어보면 좋을 것 같다.
+
+## Applicative examples
+
+#### Maybe
+
+`Maybe`로 시작하는 `Applicative`의 인스턴스를 써보자. `pure`은 `Just`로 감싸는 값을 주입하도록 동작한다. `<*>`은 실패할 가능성이 있는 함수 적용이다. 함수 또는 인자가 있다면 결과는 `Nothing`이다.
+
+```haskell
+instance Applicative Maybe where
+    pure = Just
+    Nothing <*> _ = Nothing 
+    _ <*> Nothing = Nothing
+    Just f <*> Just x = Just (f x)
+```
+
+예제를 살펴보자.
+
+```haskell
+m_name1, m_name2 :: Maybe Name
+m_name1 = Nothing
+m_name2 = Just "Brent"
+
+m_phone1, m_phone2 :: Maybe String
+m_phone1 = Nothing
+m_phone2 = Just "555-1234"
+
+ex01 = Employee <$> m_name1 <*> m_phone1
+ex02 = Employee <$> m_name1 <*> m_phone2
+ex03 = Employee <$> m_name1 <*> m_phone1
+ex04 = Employee <$> m_name2 <*> m_phone2
+```
+
+```haskell
+*Thing> ex01
+Nothing
+*Thing> ex02
+Nothing
+*Thing> ex03
+Nothing
+*Thing> ex04
+Just (Employee {name = "Brent", phone = "555-1234"})
 ```
