@@ -149,7 +149,7 @@ liftX h fa b fc = h <$> fa <*> pure b <*> fc
 
 ## Applicative laws
 
-`Applicatice`에는 정말 흥미로운 한가지 법칙이 있다.
+`Applicative`에는 정말 흥미로운 한가지 법칙이 있다.
 
 ```haskell
 f `fmap` x === pure f <*> x
