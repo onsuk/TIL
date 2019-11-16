@@ -102,3 +102,8 @@ class Monad m where
 - `c4 :: IO a`는 잠재적인 I/O effect를 갖고 `a`를 생성하는 계산이다.
 
 이제 두번째 인자를 살펴보도록 하자. `(a -> m b)` 타입의 함수이다. 즉, 첫번째 계산의 결과값을 기반으로 다음 계산을 결정한다는 것이다. 
+
+## Exmaples
+
+
+## Monad combinators
