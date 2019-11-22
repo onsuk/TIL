@@ -69,5 +69,42 @@ HTTP request는 다음과 같은 것들도 포함한다.
 #### Cookie header
 클라이언트에게 추가적인 파라미터(쿠키)를 보낸다.
 
+## HTTP Responses
+HTTP request와 같이 HTTP response는 세가지 요소로 구성되어 있다.
+
+```
+HTTP/1.1 200 OK
+```
+
+1. 첫 번째 부분은 사용되고 있는 HTTP 버전을 나타낸다.
+2. 두 번째 부분은 요청 결과에 대한 숫자 코드이다.
+3. 세 번째 부분은 두 번째 부분에 대한 글자로 된 설명이다.
+
+HTTP response는 다음과 같은 것들도 포함한다.
+
+#### Server header
+어떤 웹 서버 소프트웨어가 사용되는지에 대한 정보이다.
+
+#### Set-Cookie header
+브라우저에게 쿠키를 발행한다.
+
+#### Message body
+일반적으로 HTTP response는 메시지 바디를 갖는다.
+
+#### Content-Length
+메시지 바디의 바이트 단위 길이를 말해준다.
+
+## HTTP Methods
+
+가장 보편적인 메소드는 `GET`과 `POST`이며, 다음과 같은 메소드들이 있다.
+
+- **GET**
+    - `GET` 요청은 자원이 수정되지 않는 데이터를 요청하는 데 사용된다. 즉, `GET` 요청은 자원 상태를 변경하지 않는다.
+- **POST**
+    - 생성할 자원에 대한 정보를 서버에게 전송한다.
+- **Put**
+    - 서버에 이미 존재하는 자원을 수정할 때 사용하며, 요청의 바디에 수정할 내용을 보낸다.
+
+
 # Reference
 [HTTP and everything you need to know about it](https://medium.com/faun/http-and-everything-you-need-to-know-about-it-8273bc224491)
