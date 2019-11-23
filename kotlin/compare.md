@@ -41,6 +41,9 @@ fun primes(num: Int) = (2..num).toList().filter { isPrime(it) }
 
 fun pairs(lis: List<Int>) = lis.zip(lis.drop(1))
 
+// 이렇게도 가능
+fun pairs(lis: List<Int>) = lis.zipWithNext()
+
 fun sorted(lis: List<Int>) = pairs(lis).all { it.first <= it.second }
 
 fun count(chr: Char, str: String) = str.filter { it == chr }.length
