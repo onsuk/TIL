@@ -102,9 +102,71 @@ HTTP response는 다음과 같은 것들도 포함한다.
     - `GET` 요청은 자원이 수정되지 않는 데이터를 요청하는 데 사용된다. 즉, `GET` 요청은 자원 상태를 변경하지 않는다.
 - **POST**
     - 생성할 자원에 대한 정보를 서버에게 전송한다.
-- **Put**
+- **PUT**
     - 서버에 이미 존재하는 자원을 수정할 때 사용하며, 요청의 바디에 수정할 내용을 보낸다.
+- **HEAD**
+    - `GET` 메소드와 같은 함수이지만 한가지 차이점이 있는데, response에 바디가 포함되지 않는다는 점이다. 하지만 `GET` 메소드를 썼을 때와 동일한 헤더를 포함한다. `HEAD` 메소드는 `GET` 요청을 하기 전에 자원이 있는지 확인하기 위해 사용된다.
+- **TRACE**
+    - 진단 목적으로 설계된 메소드이다. 응답에는 바디에 요청 메시지의 정확한 내용이 포함된다.
+- **OPTINS**
+    - 대상 자원에 사용 가능한 통신 옵션(HTTP 메소드)들을 명시하기 위해 쓴다.
+- **PATCH**
+    - 자원에 부분적인 수정을 적용하는데에 사용된다.
+- **DELETE**
+    - 특정한 자원을 삭제하는 데에 사용된다.
 
+
+## REST
+**REST**(Representational State Transfer)은 시스템 자원에 대한 현재 상태의 표현을 포함하는 요청과 응답에 대한 아키텍쳐 스타일이다.
+
+#### "일반적인" 스타일
+`http://carapp.com/search?make=wv&model=beetle`
+
+#### REST 스타일
+`http://carapp.com/search/vw/beetle`
+
+> REST API에 대해서는 여타 좋은 자료들이 많으니 참고하면 좋을것 같다.
+
+## HTTP Headers
+
+요청/응답 구조의 3가지 주요 요소가 있다.
+- First line
+- Headers
+- Body/Content
+
+이번에는 HTTP 헤더에 대해 얘기해보려고 한다.
+
+HTTP 헤더는 첫줄 다음에 추가되며, `:`(colon)으로 구분된 값 쌍으로 정의된다. HTTP 헤더는 요청과 응답의 추가적인 파라미터를 보내는데 쓰인다.
+
+우리가 이미 말했듯이, 바디의 메시지는 요청과 함께 보내져야할 데이터 혹은 응답과 함께 받는 데이터를 포함한다.
+
+헤더는 어떻게 사용되는지에 따라 4가지의 카테고리로 나눠진다.
+
+- **General header** : 요청과 응답 둘 다의 메시지에 쓰일 수 있는 헤더이다. 데이터가 교환되는 것과는 상관없다.
+- **Request header** : 데이터 요청의 파라미터를 정의하거나 클라이언트의 요청 생성에 관한 중요한 정보를 주는 파라미터를 정의한다.
+- **Response header** : 받을 응답에 대한 정보를 포함한다.
+- **Entity header** : 바디 메시지를 구성하는 콘텐츠에 대한 정보를 담는다.
+
+![](img/image5.jpeg)
+
+## HTTP status codes
+
+모든 HTTP 응답 메시지는 HTTP 상태 코드를 첫줄에 포함해야 한다. 상태 코드는 요청의 결과를 말해준다.
+
+첫번째 숫자를 통해 구분지어 보게 되면, 5개의 그룹이 있다.
+
+- **1xx** : 조건부 응답(Informational)
+    - 응답을 받았으며, 작업을 계속 함을 의미
+- **2xx** : 성공(Success)
+    - 요청이 정상적으로 처리되었음을 의미
+- **3xx** : 리다이렉트(Redirection)
+    - 서버가 요청을 마치기 위해서는 추가 동작을 해야 함을 의미
+- **4xx** : 클라이언트 에러(Client error)
+    - 클라이언트의 원인으로 에러가 발생했음을 의미
+- **5xx** : 서버 에러(Server error)
+    - 서버의 원인으로 에러가 발생했음을 의미
+
+> HTTP 상태 코드에 대해 각각 자세한 설명은 [HTTP 상태 코드 - 위키백과](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C)에서 확인할 수 있다.
 
 # Reference
 [HTTP and everything you need to know about it](https://medium.com/faun/http-and-everything-you-need-to-know-about-it-8273bc224491)
