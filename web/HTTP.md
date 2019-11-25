@@ -168,5 +168,30 @@ HTTP 헤더는 첫줄 다음에 추가되며, `:`(colon)으로 구분된 값 쌍
 
 > HTTP 상태 코드에 대해 각각 자세한 설명은 [HTTP 상태 코드 - 위키백과](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C)에서 확인할 수 있다.
 
+## HTTPS(Hypertext Transfer Protocol Secure)
+HTTPS는 말 그대로 HTTP의 안전한 버전이다. HTTPS는 브라우저(클라이언트)와 웹 사이트(서버) 간의 암호화된 통신을 제공한다.
+
+HTTPS는 **TLS**(Transprot Layer Security) 혹은 **SSL**(Secure Sockets Layers)을 사용해 통신 프로토콜을 암호화한다.
+
+그래서 TSL를 통한 HTTP, SSL을 통한 HTTP로 불리기도 한다.
+
+TLS와 SSL 프로토콜 모두 비대칭 암호화 시스템이다. 비대칭 암호화 시스템은 메시지를 암호화하기 위해 **퍼블릭 키**(암호화 키)와 **프라이빗 키**(역암호화 키)를 사용한다. 모두가 메시지를 암호화하기 위해 퍼블릭 키를 쓸 수 있다. 하지만 프라이빗 키는 비밀이기 때문에 수신자만 메시지를 해독할 수 있다.
+
+![](img/image6.png)
+
+## SSL/TLS handshake
+
+웹사이트에 HTTPS 연결을 요청할 때 웹사이트는 브라우저에게 SSL 인증을 보낸다. 브라우저와 웹 사이트의 통신이 시작하는 부분을 **SSL/TLS handshake**이라고 한다. SSl/TLS handshake는 브라우저와 웹사이트가 SSL/TLS를 통해 각자에 대한 검증 시작하는 단계이다. 
+
+## Benefits of HTTPS
+HTTPS 사용을 통해 얻는 이점은 다음과 같다.
+
+- 신용 카드 번호나 다른 민감한 정보같은 고객 정보가 암호화되어 유출 위험이 줄어든다.
+- 방문자는 우리가 등록된 업체인지, 도메인을 소유하고 있는지 확인할 수 있다.
+- 고객은 주로 HTTPS 없이 방문하지 않으므로 HTTPS를 사용하는 사이트를 신뢰하고 구매를 할 가능성이 높다.
+
+
 # Reference
 [HTTP and everything you need to know about it](https://medium.com/faun/http-and-everything-you-need-to-know-about-it-8273bc224491)
+
+[TLS/SSL Handshake란](https://hanjungv.github.io/2017-11-07-1_CS_SSL/)
