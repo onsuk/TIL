@@ -101,9 +101,112 @@ class Monad m where
 - `c3 :: Parser a`는 암묵적으로 `String`을 소비하며 가능한 경우 `a`를 생성하는 계산이다.
 - `c4 :: IO a`는 잠재적인 I/O effect를 갖고 `a`를 생성하는 계산이다.
 
-이제 두번째 인자를 살펴보도록 하자. `(a -> m b)` 타입의 함수이다. 즉, 첫번째 계산의 결과값을 기반으로 다음 계산을 결정한다는 것이다. 
+이제 두번째 인자를 살펴보도록 하자. `(a -> m b)` 타입의 함수이다. 즉, 첫번째 계산의 결과값을 기반으로 다음 계산을 결정한다는 것이다. 이것은 정확히 이전 계산의 결과 값에 기반해 다음에 무엇을 할지 결정하는 계산을 캡슐화하기 위해 `Monad`의 보장된 힘을 구현한다.
+
+그래서 `(>>=)`는 사실상 두개의 mobits(?)를 합쳐서 첫번째를 실행시키고 두번째의 결과값을 반환하는 더 큰 하나를 만들어낸다. 가장 중요한 부분은 첫번째의 결과값을 기반으로 실행할 두번째 mobit을 결정한다는 것이다.
+
+`(>>)`의 구현은 이제야 의미가 있게 된다.
+
+```haskell
+(>>) :: m a -> m b -> m b
+m1 >> m2 = m1 >>= \_ -> m2
+```
+
+`m1 >> m2`는 `m1`의 결과값을 무시하고, 그저 `m1`과 `m2`를 실행하는 것이다.
 
 ## Exmaples
+`Maybe`에 대한 `Monad` 인스턴스를 만들어보도록 하자.
 
+```haskell
+instance Monad Maybe where
+    return = Just
+    Nothing >>= _ = Nothing
+    Just x >>= k = k x
+```
+`return`은 당연히 `Just`이다. 만약 `(>>=)`의 첫번째 인자가 `Nothing`이라면 모든 계산은 실패하게 된다. 만약 `Just x`라면 다음에 무엇을 할지 결정하기 위해 두번째 인자를 `x`에 적용한다.
+
+다음은 예시이다.
+
+```haskell
+check :: Int -> Maybe Int
+check n | n < 10 = Just n
+        | otherwise = Nothing
+
+halve :: Int -> Maybe Int
+halve n | even n = Just $ n `div` 2
+        | otherwise = Nothing
+
+ex11 = return 7 >>= check >>= halve
+ex22 = return 12 >>= check >>= halve
+ex33 = return 12 >>= halve >>= check
+```
+
+다음과 같이 확인할 수 있다.
+
+```bash
+*Thing> ex11
+Nothing
+*Thing> ex22
+Nothing
+*Thing> ex33
+Just 6
+```
+
+list constructor `[]`에 대한 `Monad` 인스턴스는 어떨까?
+
+```haskell
+instance Monad [] where
+    return x = [x]
+    xs >>= k = concat (map k xs)
+
+-- Simple example
+
+addOneOrTwo :: Int -> [Int]
+addOneOrTwo x = [x + 1, x + 2]
+
+ex44 = [10, 20, 30] >>= addOneOrTwo
+```
+
+다음과 같이 확인할 수 있다.
+
+```bash
+*Thing> ex44
+[11,12,21,22,31,32]
+```
 
 ## Monad combinators
+`Monad` 클래스에 대한 한가지 좋은 점은 `return`과 `(>>=)`만 써서 유익한 일반적인 것을 만들 수 있다. 다음 예시를 살펴보도록 하자.
+
+첫번째로 `sequence`는 monadic 값의 list를 받아서, 결과값만 있는 단일 monadic 값을 생성한다. 이것이 의미하는 바는 부분적 monad이다. 예를 들어, `Maybe`의 경우 전체 계신의 성공은 각자 하나하나의 계산이 이루어져야만 성공한다. `IO`의 경우 전체 계산을 순차적으로 실행하는 것을 뜻한다. `Parser`의 경우 순차적 입력의 부분에서 파서를 실행하는 것을 듯한다. (그리고 모든 것이 실행되어야 성공하는 것을 뜻한다.)
+
+```haskell
+sequence' :: Monad m => [m a] -> m [a]
+sequence' [] = return []
+sequence' (ma:mas) = 
+    ma >>= \a ->
+        sequence' mas >>= \as ->
+            return (a:as)
+```
+
+> `Prelude.sequence`를 대신해서 `sequence'`로 실습해봤다. `Prelude`에 있는 함수와는 타입에 있어 다소 차이가 있다.
+
+`sequence`를 사용해서 다음과 같은 다른 조합을 만들어 볼 수도 있다.
+
+```haskell
+replicateM :: Monad m => Int -> m a -> m [a]
+replicateM n m = sequence' (replicate n m)
+```
+
+그리고 이제 마침내 필요했던 parser을 만들 수 있다. 다음과 같이 간단하다.
+
+```haskell
+parserFile :: Parser [[Int]]
+parserFile = many parserLine
+
+parserLine :: Parser [Int]
+parserLine = parseInt >>= \i -> replicateM i parseInt
+```
+
+> 실행을 해서 프로그램을 돌려보고 싶지만 앞선 과정에서 `parseInt` 함수가 있다고 '가정'하고 넘어가는 바람에 돌려볼 수가 없다.
+
+`many`는 `zeroOrMore` homework에서 확인할 수 있다.
