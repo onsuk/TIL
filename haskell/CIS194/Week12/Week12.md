@@ -29,7 +29,7 @@ instance Applicative Parser where
 Just (143, "xkkj")
 ```
 
-homework에서 볼 수 있었듯이, 우리는 이제 다음과 같이 쓸 수 있다.
+Homework에서 볼 수 있었듯이, 우리는 이제 다음과 같이 쓸 수 있다.
 
 ```haskell
 data Foo = Bar Int Int Char
@@ -54,7 +54,7 @@ parseFoo = Bar <$> parseInt <*> parseInt <*> parseChar
 3 2         -- third group
 ```
 
-조금 얄궂은 예제이지만, 사실 "real-world" 파일 형식에서도 비슷한 원칙을 따르는 경우가 많다. Block의 길이를 말해주는 header이나, 파일에서 찾아야 할 곳 등을 읽게 된다.
+다소 얄궂은 예제이지만, 사실 "real-world" 파일 형식에서도 비슷한 원칙을 따르는 경우가 많다. Block의 길이를 말해주는 header이나, 파일에서 찾아야 할 곳 등을 읽게 된다.
 
 이러한 타입의 파일 형식에 대한 parser을 작성해보자.
 
@@ -62,9 +62,9 @@ parseFoo = Bar <$> parseInt <*> parseInt <*> parseChar
 parseFile :: Parser [[Int]]
 ```
 
-유감스럽게도 `Applicative` 인터페이스만을 이용해서는 불가능하다. `Applicative`는 이전의 결과값에 기반해서 다음에 무엇을 할 지 결정하는 것이 불가능하기 때문이다. 실행하려고 하는 파싱 연산을, 결과값을 보기 전에 미리 결정해야만 한다.
+유감스럽게도 `Applicative` 인터페이스만을 이용해서는 불가능하다. `Applicative`는 이전의 결과값에 기반해서 다음에 무엇을 할 지 결정하는 것이 불가능하기 때문이다. (Parser은 전체의 결과값이 나오기 전에, 실행하려고 하는 파싱 연산이 미리 결정되어야만 한다.)
 
-하지만 `Parser` 타입이 이러한 패턴을 사용할 수 있다는 것이 밝혀졌고, 그것은 `Monad` 타입 클래스로 추상화된다.
+하지만 `Parser` 타입에 이러한 패턴이 가능하다는 것이 밝혀졌고, 그것은 `Monad` 타입 클래스로 추상화된다.
 
 ## Monad
 
