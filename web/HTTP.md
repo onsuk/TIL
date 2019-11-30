@@ -2,18 +2,18 @@
 
 **HTTP**(Hypertext Transfer Protocol)은 웹 브라우징에 사용되는 통신 프로토콜이다. 이 프로토콜은 클라이언트가 HTTP 요청을 보내고 서버가 브라우저에 표시될 리소스를 응답하는 방식의 메시지 기반의 방식을 사용한다.
 
-#### 모든 HTTP 통신은 요청과 응답을 포햠한다. 그 특성상, HTTP는 stateless하다.
+### 모든 HTTP 통신은 요청과 응답을 포햠한다. 그러므로 HTTP는 stateless하다.
 
-**stateless**는 모든 요청이 다른 요청과 분리되어 있기 때문에 스스로 요청을 만족시키는 충분한 정보가 포함되어 있어야 한다. 즉, stateless하다는 것은 HTTP 기반의 각 메시지의 처리는 각각 개별적으로 처리된다는 것을 의미한다.
+**stateless**는 모든 요청이 다른 요청과 분리되어 있기 때문에, 각 요청은 스스로의 조건을 만족시키는 충분한 정보가 포함되어 있어야 한다. 즉, stateless하다는 것은 HTTP 기반의 각 메시지의 처리가 각각 개별적으로 처리된다는 것을 의미한다.
 
 ## URL
 **URL**(Uniform Resource Locator)은 아마도 가장 잘 알려진 웹의 개념일 것이다. 또한 가장 중요하고 유용한 개념이기도 하다. URL은 웹 상의 자원(resource)을 찾기 위해 사용하는 고유한 주소이다.
 
-> 웹에 대한 아이디어는 자원을 중심으로 구성되었다. 웹의 출발점이 text/HTML 파일, 문서, 이미지 등 자원을 공유하기 위한 플랫폼이었다.
+> 웹에 대한 아이디어는 자원을 중심으로 구성되었다. 웹의 출발점이 text/HTML 파일, 문서, 이미지 등 자원을 공유하기 위한 플랫폼이었기 때문이다.
 
 ![](img/image4.png)
 
-#### Protocol
+### Protocol
 대부분의 경우 **HTTP** 혹은 **HTTPS**이다. 
 
 알아둘만한 다음과 같은 프로토콜이 있다.
@@ -22,13 +22,13 @@
 - **SMTP**(Simpel Mail Transfer Protocol)
     - 이메일 전송을 위한 표준 프로토콜이다.
 
-#### Domain
+### Domain
 자원이 위치하고 있는 하나 이상의 IP 주소를 나타내기 위한 이름이다.
 
-#### Path
+### Path
 서버 상에 위치한 리소스의 위치를 명시한다. 이 글을 읽는 디바이스에서 사용하는 자원 위치와 같은 로직을 사용한다.
 
-#### Parameters
+### Parameters
 자원을 나타내거나 필터링하는 등의 추가적인 데이터이다.
 
 ## HTTP Requests
@@ -57,16 +57,16 @@ URL에 `?`이 있는 것은 쿼리를 포함한다는 뜻이다. 즉, 요청된 
 
 HTTP request는 다음과 같은 것들도 포함한다.
 
-#### Referer header
+### Referer header
 요청이 어떤 URL로부터 왔는지 말해준다. 즉, 현재 요청된 페이지의 링크 이전의 웹 페이지 주소를 포함한다. 사람들이 어디로부터 와서 웹을 방문 중인지 인식할 수 있도록 해주며, 해당 데이터는 분석, 로깅, 혹은 캐싱 최적화에 사용될 수도 있다.
 
-#### User-Agent header
+### User-Agent header
 요청을 보낸 브라우저에 대한 추가적인 정보를 포함한다. 즉, 현재 사용자가 어떤 클라이언트(운영체제 or 브라우저 등)를 이용해 요청을 보냈는지 나온다.
 
-#### Host header
+### Host header
 고유한 호스트 이름을 나타낸다. 같은 서버에 동일한 웹 페이지가 호스팅되어 있을 경우 꼭 필요하다.
 
-#### Cookie header
+### Cookie header
 클라이언트에게 추가적인 파라미터(쿠키)를 보낸다.
 
 ## HTTP Responses
@@ -82,16 +82,16 @@ HTTP/1.1 200 OK
 
 HTTP response는 다음과 같은 것들도 포함한다.
 
-#### Server header
+### Server header
 어떤 웹 서버 소프트웨어가 사용되는지에 대한 정보이다.
 
-#### Set-Cookie header
+### Set-Cookie header
 브라우저에게 쿠키를 발행한다.
 
-#### Message body
+### Message body
 일반적으로 HTTP response는 메시지 바디를 갖는다.
 
-#### Content-Length
+### Content-Length
 메시지 바디의 바이트 단위 길이를 말해준다.
 
 ## HTTP Methods
@@ -119,10 +119,10 @@ HTTP response는 다음과 같은 것들도 포함한다.
 ## REST
 **REST**(Representational State Transfer)은 시스템 자원에 대한 현재 상태의 표현을 포함하는 요청과 응답에 대한 아키텍쳐 스타일이다.
 
-#### "일반적인" 스타일
+### "일반적인" 스타일
 `http://carapp.com/search?make=wv&model=beetle`
 
-#### REST 스타일
+### REST 스타일
 `http://carapp.com/search/vw/beetle`
 
 > REST API에 대해서는 여타 좋은 자료들이 많으니 참고하면 좋을것 같다.
