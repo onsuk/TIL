@@ -9,3 +9,4 @@
 - **터미널 창** : ``control + ` ``
 - **폰트 축소 / 확대** : `command + - / +`
 - **Command Palette** : `shift + command + p` or `F1`
+- **새 창 띄우기** : `command + k, o` (`o` without `command`)
