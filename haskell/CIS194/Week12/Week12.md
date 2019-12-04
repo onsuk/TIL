@@ -208,6 +208,4 @@ parserLine :: Parser [Int]
 parserLine = parseInt >>= \i -> replicateM i parseInt
 ```
 
-> 실행을 해서 프로그램을 돌려보고 싶지만 앞선 과정에서 `parseInt` 함수가 있다고 '가정'하고 넘어가는 바람에 돌려볼 수가 없다...
-
 `many`는 `zeroOrMore` homework에서 확인할 수 있다.
