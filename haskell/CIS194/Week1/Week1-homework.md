@@ -8,8 +8,8 @@ toDigits :: Integer -> [Integer]
 toDigitsRev :: Integer -> [Integer]
 ```
 
-toDigits should convert positive Integers to a list of digits. (For 0 or
-negative inputs, toDigits should return the empty list.) toDigitsRev
+`toDigits` should convert positive Integers to a list of digits. (For 0 or
+negative inputs, `toDigits` should return the empty list.) `toDigitsRev`
 should do the same, but with the digits reversed.
 
 ```haskell
@@ -46,7 +46,7 @@ double every other one. Define a function
 doubleEveryOther :: [Integer] -> [Integer]
 ```
 
-Remember that doubleEveryOther should double every other number beginning from the right, that is, the second-to-last, fourth-to-last,
+Remember that `doubleEveryOther` should double every other number beginning from the right, that is, the second-to-last, fourth-to-last,
 . . . numbers are doubled.
 
 ```haskell
