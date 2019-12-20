@@ -242,6 +242,61 @@ Haskell은 `if` 표현식을 잘 쓰지 않는다. Pattern matching이나 guards
 
 ## Defining basic functions
 
+경우에 따라 정수에 대해 함수를 작성할 수도 있다.
+
+```haskell
+-- 1부터 n까지 정수의 합을 계산한다.
+sumtorial :: Integer -> Integer
+sumtorial 0 = 0
+sumtorial n = n + sumtorial (n - 1)
+```
+
+`sumtorial :: Integer -> Integer`이라는 함수의 타입에 대한 문법을 살펴보도록 하자. 이 문법은 `sumtorial`이라는 함수가 `Integer`을 입력으로 받으며 또다른 `Integer`라는 결과값을 낸다는 뜻이다.
+
+각 절은 순차적으로 위에서부터 아래로 적용되며 첫번째로 매칭되는 절이 선택된다. 예를 들어, `sumtorial 0`은 0이라 계산된다. 첫번째 절(`sumtorial 0 = 0`)이 매칭되기 때문이다. `sumtorial 3`은 첫번째 절에 매칭되지 않으며 두번째 절(`sumtorial n = n + sumtorial (n - 1)`이 시도된다. 변수 `n`은 어떤 값이든 매칭하며, `sumtorial 3`은 `3 + sumtorial (3 - 1)`을 계산한다. (계속 계산될 것이다.)
+
+Guard를 이용해서 임의의 Boolean 표현식을 기반으로 선택할 수도 있다. 다음과 같다.
+
+```haskell
+hailstone :: Integer -> Integer
+hailstone n
+    | n `mod` 2 == 0 = n `div` 2
+    | otherwise      = 3 * n + 1
+```
+
+Guard의 개수와 상관없이 Boolean 표현식으로 되어 있는 각 절은 함수 정의와 연관되어 있다. 절의 패턴에 매칭된다면 guard는 위에서부터 아래로 계산된다. 처음으로 `True`가 되는 절이 선택된다. 만약 어떠한 gaurd도 `True`로 계산되지 않는다면, 매칭은 계속해서 다음 절로 간다.
+
+예를 들어, `hailstone 3`을 계산한다고 해보자. 우선 `3`은 `n`에 매칭된다. (변수는 어떤 값이든 매칭하기 때문이다.) 그 다음 ``n `mod` 2 == 0``이 계산된다. `n = 3`은 `2`로 나누었을 때 `0`이 남지 않기 때문에 `False`일 것이다. `otherwise`는 `True`라고 생각하면 된다. 그래서 두번째 gaurd가 선택되며 `hailstone 3`의 결과값은 `3 * 3 + 1 = 10`이다.
+
+조금 더 복잡한 예를 살펴보도록 하자.
+
+```haskell
+foo :: Integer -> Integer
+foo 0 = 16
+foo 1
+    | "Haskell" > "C++" = 3
+    | otherwise         = 4
+foo n
+    | n < 0             = 0
+    | n `mod` 17 == 2   = -43
+    | otherwise         = n + 3
+```
+
+`foo (-3)`의 결과값은 무엇일까? `foo 0`은? `foo 1`, `foo 36`, `foo 38`은?
+
+마지막으로 알아둘 점이다. `hailstone`을 정의할 때 사용되었던 짝수인지 아닌지 검사하는 부분을 추상화한다고 가정해보도록 하자. 다음과 같은 첫번째 시도는 다음과 같다.
+
+```haskell
+isEven :: Integer -> Bool
+isEven n
+    | n `mod` 2 == 0 = True
+    | otherwise      = False
+```
+
+위 코드는 동작하지만 쓸데없이 복잡하다. 왜 그런지 알 것 같은가?
+
+> 위와 같은 경우는 굳이 gaurd를 사용할 필요가 없기 때문이다. `isEven n = n `mod` 2 == 0`이라는 코드 한 줄로 끝나게 된다.
+
 ## Pairs
 
 ## Using functions, and multiple arguments
