@@ -299,6 +299,24 @@ isEven n
 
 ## Pairs
 
+다음과 같이 pair할 수 있다.
+
+```haskell
+p :: (Int, Char)
+p = (3, 'x')
+```
+
+`(x, y)`의 문법은 값과 값의 타입에도 똑같이 사용된다는 점을 주의하자.
+
+Pair의 요소는 매턴매칭으로 추출할 수 있다.
+
+```haskell
+sumPair :: (Int, Int) -> Int
+sumPair (x, y) = x + y
+```
+
+Haskell 은 triples, quaeruples, ... 또한 있다. 하지만 그것들을 쓰면 안된다. 다음 강의에서 볼 수 있지만, 3개 혹은 그 이상의 것들을 package하는 데에 있어 훨씬 더 좋은 방법이 있다.
+
 ## Using functions, and multiple arguments
 
 ## Lists
