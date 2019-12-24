@@ -349,6 +349,33 @@ f 3 (n + 1) 7
 
 ## Lists
 
+리스트는 Haskell의 기본 데이터 타입 중 하나이다.
+
+```haskell
+nums, range, range2 :: [Integer]
+nums = [1, 2, 3, 19]
+range = [1..100]
+range2 = [2, 4..100]
+```
+
+Haskell은 (Python과 같이) list comprehension을 지원한다. [LYAH](http://learnyouahaskell.com/starting-out)에서 더 많은 정보를 볼 수 있다.
+
+String은 (C와 같이) 단지 characters의 리스트일 뿐이다. 즉 `String`은 `[Char]`와 같은 의미를 가진다.
+
+```haskell
+-- hello1과 hello2는 정확히 똑같다.
+
+hello1 :: [Char]
+hello1 = ['h', 'e', 'l', 'l', 'o']
+
+hello2 :: String
+hello2 = "hello"
+
+helloSame = hello1 == hello2
+```
+
+리스트에 적용될 수 있는 모든 표준 라이브러리 함수들은 `String`에도 똑같이 적용되는 것을 의미한다.
+
 ## Constructing lists
 
 ## Functions on lists
