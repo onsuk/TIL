@@ -378,6 +378,34 @@ helloSame = hello1 == hello2
 
 ## Constructing lists
 
+가장 간단한 리스트는 비어있는 리스트이다.
+
+```haskell
+emptyList = []
+```
+
+다른 리스트들은 비어있는 리스트에서부터 cons 연산자로 불리는 `(:)`를 통해 만들어진다. Cons는 요소와 리스트를 취하고 해당 요소가 맨 앞에 있는 새로운 리스트를 만들어낸다.
+
+```haskell
+ex18 = 1 : []
+ex19 = 3 : (1 : [])
+ex20 = 2 : 3 : 4 : []
+
+ex21 = [2, 3, 4] == 2 : 3 : 4 :[]
+```
+
+`[2, 3, 4]` 문법은 `2 : 3 : 4 : []`의 편리를 위한 축약형인 것을 알 수 있다. 이것은 엄밀히 linked list이지, array가 아니라는 것을 유의하도록 하자.
+
+```haskell
+-- 시작하는 숫자로부터 hailstone iteration을 연속적으로 생성한다.
+-- 앞서 작성한 hailstone 함수를 사용한다.
+hailstoneSeq :: Integer -> [Integer]
+hailstoneSeq 1 = [1]
+hailstoneSeq n = n : hailstoneSeq (hailstone n)
+```
+
+`1`에 도달하게 되면 hailstone을 멈춘다. 일반적인 `n`의 hailstone 시퀀스는 `n` 자체로 구성되며, 그 다음 hailstone 시퀀스인 `hailstone n`에 따라 구성된다. 즉, 생성되는 숫자들은 `n`에 hailstone transformation을 한번 적용한 숫자들이다.
+
 ## Functions on lists
 
 ## Combining functions
