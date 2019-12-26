@@ -408,6 +408,34 @@ hailstoneSeq n = n : hailstoneSeq (hailstone n)
 
 ## Functions on lists
 
+패턴 매칭을 이용해 리스트에 함수를 적용할 수도 있다.
+
+```haskell
+-- 정수 리스트의 길이를 계산한다.
+intListLength :: [Integer] -> Integer
+intListLength [] = 0
+intListLength (x:xs) = 1 + intListLength xs
+```
+
+첫번째 절은 비어있는 리스트의 길이가 `0`이라는 뜻이다. 두번째 절은 입력 리스트가 `(x:xs)`로 보이며, 첫번째 요소인 `x`가 남은 리스트인 `xs`와 cons로 연결되어 있는 것을 뜻한다. 그리고 `xs`의 길이에 1이 더해진다.
+
+`x`를 사용하지 않기 때문에 언더스코어(`_`)로 대체할 수 있다.
+
+```haskell
+intListLength (_:xs) = 1 + intListLength xs
+```
+
+다음과 같이 중첩된 패턴도 사용 가능하다.
+
+```haskell
+sumEveryTwo :: [Integer] -> [Integer]
+sumEveryTwo [] = [] -- 비어있는 리스트에 아무것도 하지 않는다.
+sumEveryTwo (x:[]) = [x] -- 하나의 요소를 갖고 잇는 리스트에 아무것도 하지 않는다.
+sumEveryTwo (x:(y:zs)) = (x + y) : sumEveryTwo zs
+```
+
+마지막 절은 `x`으로 시작되며 `y`로 시작되며 `zs`가 연결되어 있는 리스트와 매칭된다는 것을 유의하도록 하자. 다른 괄호가 필요없기 때문에 `sumEveryTwo (x:y:zs) = ...`도 사실 같다.
+
 ## Combining functions
 
 ## A word about error messages
