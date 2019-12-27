@@ -438,4 +438,16 @@ sumEveryTwo (x:(y:zs)) = (x + y) : sumEveryTwo zs
 
 ## Combining functions
 
+여러 개의 단순한 함수를 결합해서 복잡한 함수를 만드는 것은 Haskell에서 상당히 탁월한 스타일이다.
+
+```haskell
+-- 여러개의 hailstone 단계가 시작점부터 1에 도달한다.
+hailsonteLen :: Integer -> Integer
+hailstoneLen n = intListLength (hailstoneSeq n) - 1
+```
+
+비효율적으로 보일 수 있다. 전체 hailstone를 생성한다음 길이를 찾는 것은 메모리를 상당히 많이 잡아먹는다. 그렇지 않은가? 사실은 그렇지 않다! Haskell의 lazy evalution 덕분이다! 각각의 요소는 필요한 만큼만 생성되기 때문에 리스트의 생성과 길이 계산은 (상호 독립적으로) 뒤섞여 발생한다. 그래서 전체 계산은 시퀀스의 길이와 상관없이 O(1)의 메모리를 사용한다. (사실은 선의의 거짓말이긴 하다. 강의를 공부하다 보면 왜 그런지와, 고치는 방법을 알게 된다.)
+
+Haskell의 lazy evalution 전략에 대해 배우게 될 것이다. 단 하나의 문장만 남겨도 된다. **전체 데이터 구조를 바꾸는 데에 작은 함수**를 쓰는 것을 두려워하지 말고, **작은 함수를 합쳐서 복잡한 함수**를 만들도록 하라. 처음엔 정말 부자연스럽게 느껴질 것이다. 하지만 효율적이게 쓸 수 있는 방법이 있으며, 한번 익숙해지면 프로그램을 작성할 때에 정말 즐겁게 할 수 있을 것이다.
+
 ## A word about error messages
