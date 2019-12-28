@@ -451,3 +451,20 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1
 Haskell의 lazy evalution 전략에 대해 배우게 될 것이다. 단 하나의 문장만 남겨도 된다. **전체 데이터 구조를 바꾸는 데에 작은 함수**를 쓰는 것을 두려워하지 말고, **작은 함수를 합쳐서 복잡한 함수**를 만들도록 하라. 처음엔 정말 부자연스럽게 느껴질 것이다. 하지만 효율적이게 쓸 수 있는 방법이 있으며, 한번 익숙해지면 프로그램을 작성할 때에 정말 즐겁게 할 수 있을 것이다.
 
 ## A word about error messages
+
+#### 오류 메시지를 무서워 하지 말라!
+GHC의 오류 메시지는 꽤 길어서 조금 무서워 보일 수 있다. 하지만 보통 길기 때문에 애매하지 않으며, 많은 유용한 정보들을 담고 있다. 다음과 같다.
+
+```
+Prelude> 'x' ++ "foo"
+
+<interactive>:25:1: error:
+    • Couldn't match expected type ‘[Char]’ with actual type ‘Char’
+    • In the first argument of ‘(++)’, namely ‘'x'’
+      In the expression: 'x' ++ "foo"
+      In an equation for ‘it’: it = 'x' ++ "foo"
+```
+
+일단 `Couldn't match expected type ‘[Char]’ with actual type ‘Char’`에 대해 알아도록 하자. '어떠한 것'이 리스트 타입임을 기대했지만 `Char` 타입을 갖고 있었다는 말이다. '어떠한 것'이 뭘까? 다음 줄은 `(++)`의 첫번째 인자 '`x`'는 잘못되었다고 말하고 있다. 그 다음 줄은 정보를 조금 더 준다. 이제 문제가 무엇인지 정확히 알 수 있다. '`x`'의 타입은 `Char`이라고 첫번째 줄에 분명히 말하고 있다. 왜 이것은 리스트 타입으로 예상되는 걸까? 왜냐하면 `(++)`의 인자는 리스트를 첫번째 인자로 받기 때문이다.
+
+거대한 에러 메시지를 마주치게 되면, AFK(Away From Keyboard) 하고 싶은 충동을 심히 억누르도록 하자. 심호흡을 쉬고 자세히 읽어보자. 전체를 다 이해할 필요는 없으며 분명 많이 배우게 될 것이다. 문제에 대한 충분한 정보를 알아낼 수 있을 것이다.
