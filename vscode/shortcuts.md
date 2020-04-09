@@ -10,3 +10,4 @@
 - **폰트 축소 / 확대** : `command + - / +`
 - **Command Palette** : `shift + command + p` or `F1`
 - **새 창 띄우기** : `command + k, o` (`o` without `command`)
+- **커서 이전 위치로 이동**: `command + u`
